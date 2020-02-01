@@ -1,0 +1,1 @@
+npm install appcenter appcenter-analytics appcenter-crashes --save-exact

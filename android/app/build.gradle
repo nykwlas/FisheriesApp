@@ -142,23 +142,7 @@ android {
             include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
         }
     }
-    signingConfigs {
-       releaseSigningConfig {
-            storeFile rootProject.file("app/my-upload-key.keystore")
-            storePassword System.getProperty("katidiskolo99654632")
-            keyAlias System.getProperty("my-key-alias")
-            keyPassword System.getProperty("katidiskolo99654632")
-        }
-    }
-    buildTypes {
-        release {
-            // Caution! In production, you need to generate your own keystore file.
-            // see https://facebook.github.io/react-native/docs/signed-apk-android.
-            // minifyEnabled enableProguardInReleaseBuilds
-            // proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-	    signingConfig signingConfigs.releaseSigningConfig
-        }
-    }
+
     // applicationVariants are e.g. debug, release
     applicationVariants.all { variant ->
         variant.outputs.each { output ->

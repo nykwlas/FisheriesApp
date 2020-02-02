@@ -143,22 +143,20 @@ android {
         }
     }
     signingConfigs {
-       release {
-            if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
-                storeFile file(MYAPP_UPLOAD_STORE_FILE)
-                storePassword MYAPP_UPLOAD_STORE_PASSWORD
-                keyAlias MYAPP_UPLOAD_KEY_ALIAS
-                keyPassword MYAPP_UPLOAD_KEY_PASSWORD
-            }
+       releaseSigningConfig {
+            storeFile rootProject.file("app/my-upload-key.keystore")
+            storePassword System.getProperty("katidiskolo99654632")
+            keyAlias System.getProperty("my-key-alias")
+            keyPassword System.getProperty("katidiskolo99654632")
         }
     }
     buildTypes {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://facebook.github.io/react-native/docs/signed-apk-android.
-            signingConfig signingConfigs.release
-            minifyEnabled enableProguardInReleaseBuilds
-            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            // minifyEnabled enableProguardInReleaseBuilds
+            // proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+	    signingConfig signingConfigs.release
         }
     }
     // applicationVariants are e.g. debug, release

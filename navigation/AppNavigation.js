@@ -6,6 +6,7 @@ import {StyleSheet, Platform, SafeAreaView, Button, View} from 'react-native';
 import Home from '../screens/Home';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Firebase from '../config/Firebase';
+import Settings from '../screens/Settings';
 
 const defaultNavOptions = {
   headerStyle: {
@@ -31,6 +32,7 @@ const handleSignout = async props => {
 const HomeNavigator = createStackNavigator(
   {
     Home: Home,
+    Settings: Settings,
   },
   {
     navigationOptions: {
@@ -46,10 +48,28 @@ const HomeNavigator = createStackNavigator(
   },
 );
 
+const SettingsNavigator = createStackNavigator(
+  {
+    Settings: Settings,
+  },
+  {
+    navigationOptions: {
+      drawerIcon: drawerConfig => (
+        <Icon
+          name={Platform.OS === 'android' ? 'md-settings' : 'ios-settings'}
+          size={23}
+          color={drawerConfig.tintColor}
+        />
+      ),
+    },
+    defaultNavigationOptions: defaultNavOptions,
+  },
+);
+
 const AppNavigation = createDrawerNavigator(
   {
     Home: HomeNavigator,
-    // Orders: OrdersNavigator,
+    Settings: SettingsNavigator,
     // Admin: AdminNavigator,
   },
   {

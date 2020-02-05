@@ -25,6 +25,8 @@ const validationSchema = Yup.object().shape({
 const Login = props => {
   const [passwordVisibility, setPasswordVisibility] = useState(true);
   const [rightIcon, setRightIcon] = useState('ios-eye');
+  const [emailField, setEmailField] = useState('');
+  const [passwordField, setPasswordField] = useState('');
 
   const goToSignup = () => props.navigation.navigate('Signup');
   const goToForgotPassword = () => props.navigation.navigate('ForgotPassword');
@@ -58,7 +60,10 @@ const Login = props => {
       </HideWithKeyboard>
       <Formik
         validateOnMount
-        initialValues={{email: '', password: ''}}
+        initialValues={{
+          email: emailField,
+          password: passwordField,
+        }}
         onSubmit={(values, actions) => {
           handleOnLogin(values, actions);
         }}
@@ -77,7 +82,9 @@ const Login = props => {
             <FormInput
               name="email"
               value={values.email}
-              onChangeText={handleChange('email')}
+              onChangeText={
+                (setEmailField(values.email), handleChange('email'))
+              }
               placeholder="Enter email"
               autoCapitalize="none"
               iconName="ios-mail"
@@ -88,7 +95,9 @@ const Login = props => {
             <FormInput
               name="password"
               value={values.password}
-              onChangeText={handleChange('password')}
+              onChangeText={
+                (setPasswordField(values.password), handleChange('password'))
+              }
               placeholder="Enter password"
               secureTextEntry={passwordVisibility}
               iconName="ios-lock"

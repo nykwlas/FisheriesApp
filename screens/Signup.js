@@ -36,6 +36,13 @@ const Signup = props => {
   );
   const [passwordIcon, setPasswordIcon] = useState('ios-eye');
   const [confirmPasswordIcon, setConfirmPasswordIcon] = useState('ios-eye');
+
+  const [nameField, setNameField] = useState('');
+  const [emailField, setEmailField] = useState('');
+  const [passwordField, setPasswordField] = useState('');
+  const [passwordConfirmField, setPasswordConfirmField] = useState('');
+  const [checkField, setCheckField] = useState(false);
+
   const goToLogin = () => props.navigation.navigate('Login');
 
   const handlePasswordVisibility = () => {
@@ -77,11 +84,11 @@ const Signup = props => {
       <Formik
         validateOnMount
         initialValues={{
-          name: '',
-          email: '',
-          password: '',
-          confirmPassword: '',
-          check: false,
+          name: nameField,
+          email: emailField,
+          password: passwordField,
+          confirmPassword: passwordConfirmField,
+          check: checkField,
         }}
         onSubmit={(values, actions) => {
           handleOnSignup(values, actions);
@@ -102,7 +109,7 @@ const Signup = props => {
             <FormInput
               name="name"
               value={values.name}
-              onChangeText={handleChange('name')}
+              onChangeText={(setNameField(values.name), handleChange('name'))}
               placeholder="Enter your full name"
               iconName="md-person"
               iconColor="#2C384A"
@@ -112,7 +119,9 @@ const Signup = props => {
             <FormInput
               name="email"
               value={values.email}
-              onChangeText={handleChange('email')}
+              onChangeText={
+                (setEmailField(values.email), handleChange('email'))
+              }
               placeholder="Enter email"
               autoCapitalize="none"
               iconName="ios-mail"
@@ -123,7 +132,9 @@ const Signup = props => {
             <FormInput
               name="password"
               value={values.password}
-              onChangeText={handleChange('password')}
+              onChangeText={
+                (setPasswordField(values.password), handleChange('password'))
+              }
               placeholder="Enter password"
               iconName="ios-lock"
               iconColor="#2C384A"
@@ -137,9 +148,12 @@ const Signup = props => {
             />
             <ErrorMessage errorValue={touched.password && errors.password} />
             <FormInput
-              name="password"
+              name="confirmPassword"
               value={values.confirmPassword}
-              onChangeText={handleChange('confirmPassword')}
+              onChangeText={
+                (setPasswordConfirmField(values.confirmPassword),
+                handleChange('confirmPassword'))
+              }
               placeholder="Confirm password"
               iconName="ios-lock"
               iconColor="#2C384A"
@@ -162,7 +176,10 @@ const Signup = props => {
               title="Agree to terms and conditions"
               checkedTitle="You agreed to our terms and conditions"
               checked={values.check}
-              onPress={() => setFieldValue('check', !values.check)}
+              onPress={() => {
+                setCheckField(prevState => !prevState);
+                setFieldValue('check', !values.check);
+              }}
             />
             <View style={styles.buttonContainer}>
               <FormButton

@@ -1,9 +1,9 @@
 import {createStackNavigator} from 'react-navigation-stack';
 import {Platform} from 'react-native';
 import Colors from '../constants/Colors';
-import Login from '../screens/Login';
-import Signup from '../screens/Signup';
-import ForgotPassword from '../screens/ForgotPassword';
+import Login from '../screens/AuthScreens/Login';
+import Signup from '../screens/AuthScreens/Signup';
+import ForgotPassword from '../screens/AuthScreens/ForgotPassword';
 
 const defaultNavOptions = {
   headerStyle: {

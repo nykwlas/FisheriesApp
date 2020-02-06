@@ -1,5 +1,5 @@
 import {createSwitchNavigator, createAppContainer} from 'react-navigation';
-import Initial from '../screens/Initial';
+import Initial from '../screens/AuthScreens/Initial';
 import AuthNavigation from './AuthNavigation';
 import AppNavigation from './AppNavigation/AppNavigation';
 

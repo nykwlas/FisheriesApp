@@ -1,39 +1,17 @@
 import React from 'react';
-import {createStackNavigator} from 'react-navigation-stack';
-import Colors from '../constants/Colors';
-import {createDrawerNavigator, DrawerItems} from 'react-navigation-drawer';
-import {
-  Text,
-  StyleSheet,
-  Platform,
-  SafeAreaView,
-  Button,
-  View,
-} from 'react-native';
-import Home from '../screens/TabScreens/Home';
-import Profile from '../screens/TabScreens/Profile';
-import Library from '../screens/TabScreens/Library';
-import Weather from '../screens/TabScreens/Weather';
-import Scores from '../screens/TabScreens/Scores';
+import {Text, Platform} from 'react-native';
+import Profile from '../../screens/TabScreens/Profile';
+import Library from '../../screens/TabScreens/Library';
+import Weather from '../../screens/TabScreens/Weather';
+import Scores from '../../screens/TabScreens/Scores';
+import Home from '../../screens/TabScreens/Home';
+import Colors from '../../constants/Colors';
+import defaultNavOptions from '../DefaultNavOptions';
 
+import Icon from 'react-native-vector-icons/Ionicons';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
-import Icon from 'react-native-vector-icons/Ionicons';
-import Firebase from '../config/Firebase';
-import Settings from '../screens/Settings';
-
-const defaultNavOptions = {
-  headerStyle: {
-    backgroundColor: Platform.OS === 'android' ? Colors.primary : '',
-  },
-  headerTitleStyle: {
-    fontFamily: 'open-sans-bold',
-  },
-  headerBackTitleStyle: {
-    fontFamily: 'open-sans',
-  },
-  headerTintColor: Platform.OS === 'android' ? 'white' : Colors.primary,
-};
+import {createStackNavigator} from 'react-navigation-stack';
 
 const HomeNavigator = createStackNavigator(
   {
@@ -142,72 +120,4 @@ const HomeTabNavigator =
         },
       });
 
-const handleSignout = async props => {
-  try {
-    await Firebase.signOut();
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const SettingsNavigator = createStackNavigator(
-  {
-    Settings: Settings,
-  },
-  {
-    navigationOptions: {
-      drawerIcon: drawerConfig => (
-        <Icon
-          name={Platform.OS === 'android' ? 'md-settings' : 'ios-settings'}
-          size={23}
-          color={drawerConfig.tintColor}
-        />
-      ),
-    },
-    defaultNavigationOptions: defaultNavOptions,
-  },
-);
-
-const AppNavigation = createDrawerNavigator(
-  {
-    Home: {
-      screen: HomeTabNavigator,
-      navigationOptions: {
-        drawerIcon: drawerConfig => (
-          <Icon
-            name={Platform.OS === 'android' ? 'md-boat' : 'ios-boat'}
-            size={23}
-            color={drawerConfig.tintColor}
-          />
-        ),
-      },
-    },
-    Settings: SettingsNavigator,
-    // Admin: AdminNavigator,
-  },
-  {
-    contentOptions: {
-      activeTintColor: Colors.primary,
-    },
-    contentComponent: props => {
-      return (
-        <View style={styles.button}>
-          <SafeAreaView forceInset={{top: 'always', horizontal: 'never'}}>
-            <DrawerItems {...props} />
-            <Button
-              title="Logout"
-              color={Colors.primary}
-              onPress={handleSignout}
-            />
-          </SafeAreaView>
-        </View>
-      );
-    },
-  },
-);
-
-const styles = StyleSheet.create({
-  button: {flex: 1, paddingTop: 20},
-});
-
-export default AppNavigation;
+export default HomeTabNavigator;

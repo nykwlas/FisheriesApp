@@ -1,12 +1,12 @@
 import React, {useEffect, useCallback} from 'react';
 import {StyleSheet, View, ActivityIndicator} from 'react-native';
-import Colors from '../constants/Colors';
+import Colors from '../../constants/Colors';
 // import {AppLoading} from 'expo';
 // import {Asset} from 'expo-asset';
 // import * as Font from 'expo-font';
 // import * as Icon from '@expo/vector-icons'
 // import Icon from 'react-native-vector-icons/Ionicons';
-import {withFirebaseHOC} from '../config/Firebase';
+import {withFirebaseHOC} from '../../config/Firebase';
 
 const Initial = props => {
   // state = {

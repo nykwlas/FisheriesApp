@@ -5,10 +5,10 @@ import {Button, CheckBox} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
-import FormInput from '../components/FormInput';
-import FormButton from '../components/FormButton';
-import ErrorMessage from '../components/ErrorMessage';
-import {withFirebaseHOC} from '../config/Firebase';
+import FormInput from '../../components/FormInput';
+import FormButton from '../../components/FormButton';
+import ErrorMessage from '../../components/ErrorMessage';
+import {withFirebaseHOC} from '../../config/Firebase';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string()

@@ -14,11 +14,15 @@ npm install --save react-native-paper
 npm install --save hoist-non-react-statics
 npm install --save react-navigation-tabs
 npm install --save react-navigation-material-bottom-tabs
+npm install --save redux react-redux redux-thunk
+npm install --save @react-native-community/async-storage
 
 npm install --save firebase
 If problem sudo apt-get install -y build-essential python
 
 If problem with signatures run adb uninstall "com.fisheriesapp"
+
+npm start --reset-cache
 
 
 npm install --save @react-native-firebase/app 

@@ -2,10 +2,10 @@ import React, {Fragment} from 'react';
 import {Text, SafeAreaView, View, StyleSheet} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
-import FormInput from '../components/FormInput';
-import FormButton from '../components/FormButton';
-import ErrorMessage from '../components/ErrorMessage';
-import {withFirebaseHOC} from '../config/Firebase';
+import FormInput from '../../components/FormInput';
+import FormButton from '../../components/FormButton';
+import ErrorMessage from '../../components/ErrorMessage';
+import {withFirebaseHOC} from '../../config/Firebase';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()

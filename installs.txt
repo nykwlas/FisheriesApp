@@ -1,1 +1,26 @@
-npm install appcenter appcenter-analytics appcenter-crashes --save-exact
+npm install react-native-elements --save
+
+npm install --save react-native-vector-icons 
+Also in android/app/build.gradle add apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+
+npm install --save react-navigation
+npm install --save react-navigation-stack @react-native-community/masked-view
+npm install --save react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context
+npm install --save formik yup
+npm install --save react-native-hide-with-keyboard
+npm install --save react-navigation-drawer
+npm install --save react-navigation-header-buttons
+npm install --save react-native-paper
+npm install --save hoist-non-react-statics
+npm install --save react-navigation-tabs
+npm install --save react-navigation-material-bottom-tabs
+
+npm install --save firebase
+If problem sudo apt-get install -y build-essential python
+
+If problem with signatures run adb uninstall "com.fisheriesapp"
+
+
+npm install --save @react-native-firebase/app 
+react-native-firebase @react-native-firebase/firestore @react-native-firebase/auth
+

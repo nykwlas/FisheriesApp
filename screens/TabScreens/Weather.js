@@ -1,36 +1,21 @@
 import React from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
-import {Button} from 'react-native-elements';
-import {withFirebaseHOC} from '../config/Firebase';
+import {withFirebaseHOC} from '../../config/Firebase';
 import {HeaderButtons, Item} from 'react-navigation-header-buttons';
 
-import HeaderButton from '../components/UI/HeaderButton';
+import HeaderButton from '../../components/UI/HeaderButton';
 
-const Home = props => {
-  const handleSignout = async () => {
-    try {
-      await props.firebase.signOut();
-      props.navigation.navigate('Auth');
-    } catch (error) {
-      console.log(error);
-    }
-  };
+const Weather = props => {
   return (
     <View style={styles.container}>
-      <Text>Home</Text>
-      <Button
-        title="Signout"
-        onPress={handleSignout}
-        titleStyle={styles.signOut}
-        type="clear"
-      />
+      <Text>Weather</Text>
     </View>
   );
 };
 
-Home.navigationOptions = navData => {
+Weather.navigationOptions = navData => {
   return {
-    headerTitle: 'Home',
+    headerTitle: 'Weather',
     headerLeft: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item
@@ -57,4 +42,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withFirebaseHOC(Home);
+export default withFirebaseHOC(Weather);

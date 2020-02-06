@@ -2,8 +2,22 @@ import React from 'react';
 import {createStackNavigator} from 'react-navigation-stack';
 import Colors from '../constants/Colors';
 import {createDrawerNavigator, DrawerItems} from 'react-navigation-drawer';
-import {StyleSheet, Platform, SafeAreaView, Button, View} from 'react-native';
-import Home from '../screens/Home';
+import {
+  Text,
+  StyleSheet,
+  Platform,
+  SafeAreaView,
+  Button,
+  View,
+} from 'react-native';
+import Home from '../screens/TabScreens/Home';
+import Profile from '../screens/TabScreens/Profile';
+import Library from '../screens/TabScreens/Library';
+import Weather from '../screens/TabScreens/Weather';
+import Scores from '../screens/TabScreens/Scores';
+
+import {createBottomTabNavigator} from 'react-navigation-tabs';
+import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Firebase from '../config/Firebase';
 import Settings from '../screens/Settings';
@@ -21,6 +35,113 @@ const defaultNavOptions = {
   headerTintColor: Platform.OS === 'android' ? 'white' : Colors.primary,
 };
 
+const HomeNavigator = createStackNavigator(
+  {
+    Home: Home,
+  },
+  {
+    defaultNavigationOptions: defaultNavOptions,
+  },
+);
+
+const tabScreenConfig = {
+  Profile: {
+    screen: Profile,
+    navigationOptions: {
+      tabBarIcon: tabInfo => {
+        return <Icon name="ios-person" size={25} color={tabInfo.tintColor} />;
+      },
+      tabBarColor: Colors.primaryColor,
+      tabBarLabel:
+        Platform.OS === 'android' ? (
+          <Text style={{fontFamily: 'open-sans-bold'}}>Profile</Text>
+        ) : (
+          'Profile'
+        ),
+    },
+  },
+  Library: {
+    screen: Library,
+    navigationOptions: {
+      tabBarIcon: tabInfo => {
+        return <Icon name="ios-book" size={25} color={tabInfo.tintColor} />;
+      },
+      tabBarColor: Colors.primaryColor,
+      tabBarLabel:
+        Platform.OS === 'android' ? (
+          <Text style={{fontFamily: 'open-sans-bold'}}>Library</Text>
+        ) : (
+          'Library'
+        ),
+    },
+  },
+  Home: {
+    screen: HomeNavigator,
+    navigationOptions: {
+      tabBarIcon: tabInfo => {
+        return <Icon name="ios-home" size={25} color={tabInfo.tintColor} />;
+      },
+      tabBarColor: Colors.primaryColor,
+      tabBarLabel:
+        Platform.OS === 'android' ? (
+          <Text style={{fontFamily: 'open-sans-bold'}}>Home</Text>
+        ) : (
+          'Home'
+        ),
+    },
+  },
+  Scores: {
+    screen: Scores,
+    navigationOptions: {
+      tabBarIcon: tabInfo => {
+        return (
+          <Icon name="ios-star-outline" size={25} color={tabInfo.tintColor} />
+        );
+      },
+      tabBarColor: Colors.primaryColor,
+      tabBarLabel:
+        Platform.OS === 'android' ? (
+          <Text style={{fontFamily: 'open-sans-bold'}}>Scores</Text>
+        ) : (
+          'Scores'
+        ),
+    },
+  },
+  Weather: {
+    screen: Weather,
+    navigationOptions: {
+      tabBarIcon: tabInfo => {
+        return <Icon name="ios-sunny" size={25} color={tabInfo.tintColor} />;
+      },
+      tabBarColor: Colors.primaryColor,
+      tabBarLabel:
+        Platform.OS === 'android' ? (
+          <Text style={{fontFamily: 'open-sans-bold'}}>Weather</Text>
+        ) : (
+          'Weather'
+        ),
+    },
+  },
+};
+
+const HomeTabNavigator =
+  Platform.OS === 'android'
+    ? createMaterialBottomTabNavigator(tabScreenConfig, {
+        activeTintColor: 'white',
+        // shifting: true,
+        barStyle: {
+          backgroundColor: Colors.primaryColor,
+        },
+      })
+    : createBottomTabNavigator(tabScreenConfig, {
+        tabBarOptions: {
+          labelStyle: {
+            fontTabFamily: 'open-sans',
+          },
+          activeTintColor: Colors.accentColor,
+        },
+      });
+
 const handleSignout = async props => {
   try {
     await Firebase.signOut();
@@ -28,25 +149,6 @@ const handleSignout = async props => {
     console.log(error);
   }
 };
-
-const HomeNavigator = createStackNavigator(
-  {
-    Home: Home,
-    Settings: Settings,
-  },
-  {
-    navigationOptions: {
-      drawerIcon: drawerConfig => (
-        <Icon
-          name={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
-          size={23}
-          color={drawerConfig.tintColor}
-        />
-      ),
-    },
-    defaultNavigationOptions: defaultNavOptions,
-  },
-);
 
 const SettingsNavigator = createStackNavigator(
   {
@@ -68,7 +170,18 @@ const SettingsNavigator = createStackNavigator(
 
 const AppNavigation = createDrawerNavigator(
   {
-    Home: HomeNavigator,
+    Home: {
+      screen: HomeTabNavigator,
+      navigationOptions: {
+        drawerIcon: drawerConfig => (
+          <Icon
+            name={Platform.OS === 'android' ? 'md-boat' : 'ios-boat'}
+            size={23}
+            color={drawerConfig.tintColor}
+          />
+        ),
+      },
+    },
     Settings: SettingsNavigator,
     // Admin: AdminNavigator,
   },

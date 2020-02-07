@@ -4,19 +4,12 @@ import Colors from '../../constants/Colors';
 import {createDrawerNavigator, DrawerItems} from 'react-navigation-drawer';
 import {StyleSheet, Platform, SafeAreaView, Button, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {useDispatch} from 'react-redux';
 
+import * as authActions from '../../store/actions/auth';
 import HomeTabNavigator from './BottomNavigator';
-import Firebase from '../../config/Firebase';
 import Settings from '../../screens/Settings';
 import defaultNavOptions from '../DefaultNavOptions';
-
-const handleSignout = async props => {
-  try {
-    await Firebase.signOut();
-  } catch (error) {
-    console.log(error);
-  }
-};
 
 const SettingsNavigator = createStackNavigator(
   {
@@ -58,6 +51,8 @@ const AppNavigation = createDrawerNavigator(
       activeTintColor: Colors.primary,
     },
     contentComponent: props => {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const dispatch = useDispatch();
       return (
         <View style={styles.button}>
           <SafeAreaView forceInset={{top: 'always', horizontal: 'never'}}>
@@ -65,7 +60,10 @@ const AppNavigation = createDrawerNavigator(
             <Button
               title="Logout"
               color={Colors.primary}
-              onPress={handleSignout}
+              onPress={() => {
+                dispatch(authActions.logout());
+                // props.navigation.navigate('Auth');
+              }}
             />
           </SafeAreaView>
         </View>

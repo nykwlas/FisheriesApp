@@ -1,73 +1,44 @@
-import React, {useEffect, useCallback} from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, View, ActivityIndicator} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+import {useDispatch} from 'react-redux';
+
+import * as authActions from '../../store/actions/auth';
 import Colors from '../../constants/Colors';
-// import {AppLoading} from 'expo';
-// import {Asset} from 'expo-asset';
-// import * as Font from 'expo-font';
-// import * as Icon from '@expo/vector-icons'
-// import Icon from 'react-native-vector-icons/Ionicons';
-import {withFirebaseHOC} from '../../config/Firebase';
 
 const Initial = props => {
-  // state = {
-  //   isAssetsLoadingComplete: false,
-  // };
-
-  const componentDidMount = useCallback(async () => {
-    try {
-      // previously
-      // this.loadLocalAsync();
-
-      await props.firebase.checkUserAuth(user => {
-        if (user) {
-          // if the user has previously logged in
-          props.navigation.navigate('App');
-        } else {
-          // if the user has previously signed out from the app
-          props.navigation.navigate('Auth');
-        }
-      });
-    } catch (error) {
-      console.log(error);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.firebase]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    componentDidMount();
-  }, [componentDidMount]);
+    const tryLogin = async () => {
+      const userData = await AsyncStorage.getItem('userData');
+      if (!userData) {
+        props.navigation.navigate('Auth');
+        return;
+      }
+      const transformedData = JSON.parse(userData);
+      const {token, userId, expiryDate} = transformedData;
+      const expirationDate = new Date(expiryDate);
 
-  // loadLocalAsync = async () => {
-  //   return await Promise.all([
-  //     Asset.loadAsync([
-  //       require('../assets/flame.png'),
-  //       require('../assets/icon.png'),
-  //     ]),
-  //     Font.loadAsync({
-  //       ...Icon.Ionicons.font,
-  //     }),
-  //   ]);
-  // };
+      if (expirationDate <= new Date() || !token || !userId) {
+        props.navigation.navigate('Auth');
+        return;
+      }
 
-  // handleLoadingError = error => {
-  //   // In this case, you might want to report the error to your error
-  //   // reporting service, for example Sentry
-  //   console.warn(error);
-  // };
+      const expirationTime = expirationDate.getTime() - new Date().getTime();
 
-  // handleFinishLoading = () => {
-  //   this.setState({isAssetsLoadingComplete: true});
-  // };
+      props.navigation.navigate('App');
+      dispatch(authActions.authenticate(userId, token, expirationTime));
+    };
+
+    tryLogin();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
 
   return (
     <View style={styles.screen}>
       <ActivityIndicator size="large" color={Colors.primary} />
     </View>
-    // <AppLoading
-    //   startAsync={this.loadLocalAsync}
-    //   onFinish={this.handleFinishLoading}
-    //   onError={this.handleLoadingError}
-    // />
   );
 };
 
@@ -79,4 +50,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withFirebaseHOC(Initial);
+export default Initial;

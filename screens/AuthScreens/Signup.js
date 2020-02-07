@@ -5,10 +5,12 @@ import {Button, CheckBox} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
+import {useDispatch} from 'react-redux';
+
 import FormInput from '../../components/FormInput';
 import FormButton from '../../components/FormButton';
 import ErrorMessage from '../../components/ErrorMessage';
-import {withFirebaseHOC} from '../../config/Firebase';
+import * as authActions from '../../store/actions/auth';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string()
@@ -43,6 +45,8 @@ const Signup = props => {
   const [passwordConfirmField, setPasswordConfirmField] = useState('');
   const [checkField, setCheckField] = useState(false);
 
+  const dispatch = useDispatch();
+
   const goToLogin = () => props.navigation.navigate('Login');
 
   const handlePasswordVisibility = () => {
@@ -61,16 +65,10 @@ const Signup = props => {
 
   const handleOnSignup = async (values, actions) => {
     const {name, email, password} = values;
-
+    const action = authActions.signup(name, email, password);
     try {
-      const response = await props.firebase.signupWithEmail(email, password);
-
-      if (response.user.uid) {
-        const {uid} = response.user;
-        const userData = {email, name, uid};
-        await props.firebase.createNewUser(userData);
-        props.navigation.navigate('App');
-      }
+      await dispatch(action);
+      props.navigation.navigate('App');
     } catch (error) {
       // console.error(error)
       actions.setFieldError('general', error.message);
@@ -226,4 +224,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withFirebaseHOC(Signup);
+export default Signup;

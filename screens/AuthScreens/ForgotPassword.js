@@ -5,7 +5,6 @@ import * as Yup from 'yup';
 import FormInput from '../../components/FormInput';
 import FormButton from '../../components/FormButton';
 import ErrorMessage from '../../components/ErrorMessage';
-import {withFirebaseHOC} from '../../config/Firebase';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -19,7 +18,7 @@ const ForgotPassword = props => {
     const {email} = values;
 
     try {
-      await props.firebase.passwordReset(email);
+      // await props.firebase.passwordReset(email);
       console.log('Password reset email sent successfully');
       props.navigation.navigate('Login');
     } catch (error) {
@@ -92,4 +91,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withFirebaseHOC(ForgotPassword);
+export default ForgotPassword;

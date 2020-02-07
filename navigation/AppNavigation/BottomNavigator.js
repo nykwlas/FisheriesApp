@@ -12,10 +12,12 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
 import {createStackNavigator} from 'react-navigation-stack';
+import RecordDetail from '../../screens/TabScreens/RecordDetail';
 
 const HomeNavigator = createStackNavigator(
   {
     Home: Home,
+    Record: RecordDetail,
   },
   {
     defaultNavigationOptions: defaultNavOptions,

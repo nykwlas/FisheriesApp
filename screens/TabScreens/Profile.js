@@ -1,6 +1,5 @@
 import React from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
-import {withFirebaseHOC} from '../../config/Firebase';
 import {HeaderButtons, Item} from 'react-navigation-header-buttons';
 
 import HeaderButton from '../../components/UI/HeaderButton';
@@ -42,4 +41,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withFirebaseHOC(Profile);
+export default Profile;

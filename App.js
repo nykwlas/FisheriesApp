@@ -1,14 +1,15 @@
 import React from 'react';
-import AppContainer from './navigation';
-import Firebase, {FirebaseProvider} from './config/Firebase';
 import {createStore, combineReducers, applyMiddleware} from 'redux';
 import {Provider} from 'react-redux';
 import ReduxThunk from 'redux-thunk';
 
-import storiesReducer from './store/reducers/stories';
+import NavigationContainer from './navigation/NavigationContainer';
+import authReducer from './store/reducers/auth';
+import recordsReducer from './store/reducers/records';
 
 const rootReducer = combineReducers({
-  stories: storiesReducer,
+  records: recordsReducer,
+  auth: authReducer,
 });
 
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
@@ -16,9 +17,7 @@ const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 export default function App() {
   return (
     <Provider store={store}>
-      <FirebaseProvider value={Firebase}>
-        <AppContainer />
-      </FirebaseProvider>
+      <NavigationContainer />
     </Provider>
   );
 }

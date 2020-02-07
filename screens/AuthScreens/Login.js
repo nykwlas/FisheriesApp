@@ -5,11 +5,13 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {HideWithKeyboard} from 'react-native-hide-with-keyboard';
+import {useDispatch} from 'react-redux';
+
 import FormInput from '../../components/FormInput';
 import FormButton from '../../components/FormButton';
 import ErrorMessage from '../../components/ErrorMessage';
 import AppLogo from '../../components/AppLogo';
-import {withFirebaseHOC} from '../../config/Firebase';
+import * as authActions from '../../store/actions/auth';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -28,6 +30,8 @@ const Login = props => {
   const [emailField, setEmailField] = useState('');
   const [passwordField, setPasswordField] = useState('');
 
+  const dispatch = useDispatch();
+
   const goToSignup = () => props.navigation.navigate('Signup');
   const goToForgotPassword = () => props.navigation.navigate('ForgotPassword');
 
@@ -38,14 +42,12 @@ const Login = props => {
     setPasswordVisibility(prevState => !prevState);
   };
 
-  const handleOnLogin = async (values, actions) => {
+  const authHandler = async (values, actions) => {
     const {email, password} = values;
+    const action = authActions.login(email, password);
     try {
-      const response = await props.firebase.loginWithEmail(email, password);
-
-      if (response.user) {
-        props.navigation.navigate('App');
-      }
+      await dispatch(action);
+      props.navigation.navigate('App');
     } catch (error) {
       actions.setFieldError('general', error.message);
     } finally {
@@ -65,7 +67,7 @@ const Login = props => {
           password: passwordField,
         }}
         onSubmit={(values, actions) => {
-          handleOnLogin(values, actions);
+          authHandler(values, actions);
         }}
         validationSchema={validationSchema}>
         {({
@@ -162,4 +164,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withFirebaseHOC(Login);
+export default Login;

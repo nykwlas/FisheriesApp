@@ -36,12 +36,13 @@ export const signup = (email, password) => {
       let message = 'Something went wrong!';
       if (errorId === 'EMAIL_EXISTS') {
         message = 'This email exists already!';
+      } else if (errorId === 'INVALID_EMAIL') {
+        message = 'This email is not valid!';
       }
       throw new Error(message);
     }
 
     const resData = await response.json();
-    // console.log(resData);
     dispatch(
       authenticate(
         resData.localId,
@@ -98,6 +99,35 @@ export const login = (email, password) => {
       new Date().getTime() + parseInt(resData.expiresIn, 10) * 1000,
     );
     saveDataToStorage(resData.idToken, resData.localId, expirationDate);
+  };
+};
+
+export const resetPassword = email => {
+  return async dispatch => {
+    const response = await fetch(
+      'https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyBEbKwUIcUAjhIDaOQzxX5Tqm_jTGI7FJY',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          requestType: 'PASSWORD_RESET',
+          email: email,
+        }),
+      },
+    );
+
+    if (!response.ok) {
+      const errorResData = await response.json();
+      const errorId = errorResData.error.message;
+      let message = 'Something went wrong!';
+      if (errorId === 'EMAIL_NOT_FOUND') {
+        message = 'This email is not found!';
+      }
+      throw new Error(message);
+    }
+    // const resData = await response.json();
   };
 };
 

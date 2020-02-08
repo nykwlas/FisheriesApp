@@ -6,11 +6,6 @@ import Colors from '../../constants/Colors';
 
 import * as authActions from '../../store/actions/auth';
 
-// let bootSplashLogo = require('../../assets/logo.png');
-
-// let fakeApiCallWithoutBadNetwork = ms =>
-//   new Promise(resolve => setTimeout(resolve, ms));
-
 const Initial = props => {
   const dispatch = useDispatch();
 

@@ -64,8 +64,8 @@ const Signup = props => {
   };
 
   const handleOnSignup = async (values, actions) => {
-    const {name, email, password} = values;
-    const action = authActions.signup(name, email, password);
+    const {email, password} = values;
+    const action = authActions.signup(email, password);
     try {
       await dispatch(action);
       props.navigation.navigate('App');

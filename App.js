@@ -15,9 +15,12 @@ const rootReducer = combineReducers({
 
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 
+let fakeApiCallWithoutBadNetwork = ms =>
+  new Promise(resolve => setTimeout(resolve, ms));
+
 export default function App() {
-  let init = async () => {
-    // …do multiple async tasks
+  const init = async () => {
+    // const waiting = await fakeApiCallWithoutBadNetwork(1500);
   };
 
   useEffect(() => {

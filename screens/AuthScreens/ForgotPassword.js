@@ -5,6 +5,8 @@ import * as Yup from 'yup';
 import FormInput from '../../components/FormInput';
 import FormButton from '../../components/FormButton';
 import ErrorMessage from '../../components/ErrorMessage';
+import * as authActions from '../../store/actions/auth';
+import {useDispatch} from 'react-redux';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -14,11 +16,13 @@ const validationSchema = Yup.object().shape({
 });
 
 const ForgotPassword = props => {
+  const dispatch = useDispatch();
+
   const handlePasswordReset = async (values, actions) => {
     const {email} = values;
-
+    const action = authActions.resetPassword(email);
     try {
-      // await props.firebase.passwordReset(email);
+      await dispatch(action);
       console.log('Password reset email sent successfully');
       props.navigation.navigate('Login');
     } catch (error) {

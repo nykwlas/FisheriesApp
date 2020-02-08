@@ -15,6 +15,7 @@ npm install --save react-navigation-tabs
 npm install --save react-navigation-material-bottom-tabs
 npm install --save redux react-redux redux-thunk
 npm install --save @react-native-community/async-storage
+npm install --save react-native-bootsplash
 
 NOT USED npm install --save firebase
 	 npm install --save hoist-non-react-statics

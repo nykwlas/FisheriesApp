@@ -9,7 +9,10 @@ import Colors from '../../constants/Colors';
 import defaultNavOptions from '../DefaultNavOptions';
 
 import Icon from 'react-native-vector-icons/Ionicons';
-import {createBottomTabNavigator} from 'react-navigation-tabs';
+import {
+  createBottomTabNavigator,
+  // createMaterialTopTabNavigator,
+} from 'react-navigation-tabs';
 import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
 import {createStackNavigator} from 'react-navigation-stack';
 import RecordDetail from '../../screens/TabScreens/RecordDetail';
@@ -31,6 +34,10 @@ const tabScreenConfig = {
       tabBarIcon: tabInfo => {
         return <Icon name="ios-person" size={25} color={tabInfo.tintColor} />;
       },
+      // tabBarOptions: {
+      //   showIcon: true,
+      //   // showLabel: false,
+      // },
       tabBarColor: Colors.primaryColor,
       tabBarLabel:
         Platform.OS === 'android' ? (
@@ -46,6 +53,10 @@ const tabScreenConfig = {
       tabBarIcon: tabInfo => {
         return <Icon name="ios-book" size={25} color={tabInfo.tintColor} />;
       },
+      // tabBarOptions: {
+      //   showIcon: true,
+      //   // showLabel: false,
+      // },
       tabBarColor: Colors.primaryColor,
       tabBarLabel:
         Platform.OS === 'android' ? (
@@ -61,6 +72,10 @@ const tabScreenConfig = {
       tabBarIcon: tabInfo => {
         return <Icon name="ios-home" size={25} color={tabInfo.tintColor} />;
       },
+      // tabBarOptions: {
+      //   showIcon: true,
+      //   // showLabel: false,
+      // },
       tabBarColor: Colors.primaryColor,
       tabBarLabel:
         Platform.OS === 'android' ? (
@@ -78,6 +93,10 @@ const tabScreenConfig = {
           <Icon name="ios-star-outline" size={25} color={tabInfo.tintColor} />
         );
       },
+      // tabBarOptions: {
+      //   showIcon: true,
+      //   // showLabel: false,
+      // },
       tabBarColor: Colors.primaryColor,
       tabBarLabel:
         Platform.OS === 'android' ? (
@@ -93,6 +112,10 @@ const tabScreenConfig = {
       tabBarIcon: tabInfo => {
         return <Icon name="ios-sunny" size={25} color={tabInfo.tintColor} />;
       },
+      // tabBarOptions: {
+      //   showIcon: true,
+      //   // showLabel: false,
+      // },
       tabBarColor: Colors.primaryColor,
       tabBarLabel:
         Platform.OS === 'android' ? (
@@ -107,6 +130,9 @@ const tabScreenConfig = {
 const HomeTabNavigator =
   Platform.OS === 'android'
     ? createMaterialBottomTabNavigator(tabScreenConfig, {
+        // swipeEnabled: true,
+        // tabBarPosition: 'bottom',
+        initialRouteName: 'Home',
         activeTintColor: 'white',
         // shifting: true,
         barStyle: {

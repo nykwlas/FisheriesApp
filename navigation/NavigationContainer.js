@@ -7,7 +7,7 @@ import AppContainer from '.';
 
 const NavigationContainer = props => {
   const navRef = useRef();
-  // const isAuth = useSelector(state => !!state.auth.token);
+
   useEffect(() => {
     const userData = AsyncStorage.getItem('userData').then(() => {
       if (!userData) {
@@ -17,12 +17,6 @@ const NavigationContainer = props => {
       }
     });
   }, []);
-
-  // useEffect(() => {
-  //   if (!isAuth) {
-  //     navRef.current.dispatch(NavigationActions.navigate({routeName: 'Auth'}));
-  //   }
-  // }, [isAuth]);
 
   return <AppContainer ref={navRef} />;
 };

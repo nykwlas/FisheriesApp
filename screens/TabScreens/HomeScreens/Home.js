@@ -10,11 +10,11 @@ import {
 import {Button} from 'react-native-elements';
 import {HeaderButtons, Item} from 'react-navigation-header-buttons';
 import {useSelector, useDispatch} from 'react-redux';
-
-import HeaderButton from '../../components/UI/HeaderButton';
-import RecordItem from '../../components/Records/RecordItem';
-import * as recordActions from '../../store/actions/records';
-import Colors from '../../constants/Colors';
+import HeaderButton from '../../../components/UI/HeaderButton';
+import RecordItem from '../../../components/Records/RecordItem';
+import * as recordActions from '../../../store/actions/records';
+import Colors from '../../../constants/Colors';
+import RecordButton from '../../../components/UI/RecordButton';
 
 const Home = props => {
   const [isLoading, setIsLoading] = useState(false);
@@ -83,34 +83,46 @@ const Home = props => {
     return (
       <View style={styles.centered}>
         <Text>No records found. Maybe start adding some!</Text>
+        <RecordButton
+          onPress={() => {
+            props.navigation.navigate('RecordForm');
+          }}
+        />
       </View>
     );
   }
 
   return (
-    <FlatList
-      onRefresh={loadRecords}
-      refreshing={isRefreshing}
-      data={records}
-      keyExtractor={item => item.id}
-      renderItem={itemData => (
-        <RecordItem
-          image={itemData.item.imageUrl}
-          title={itemData.item.title}
-          price={itemData.item.date}
-          onSelect={() => {
-            selectItemHandler(itemData.item.id, itemData.item.title);
-          }}>
-          <Button
-            color={Colors.primary}
-            title="View Details"
-            onPress={() => {
+    <View>
+      <FlatList
+        onRefresh={loadRecords}
+        refreshing={isRefreshing}
+        data={records}
+        keyExtractor={item => item.id}
+        renderItem={itemData => (
+          <RecordItem
+            image={itemData.item.imageUrl}
+            title={itemData.item.title}
+            price={itemData.item.date}
+            onSelect={() => {
               selectItemHandler(itemData.item.id, itemData.item.title);
-            }}
-          />
-        </RecordItem>
-      )}
-    />
+            }}>
+            <Button
+              color={Colors.primary}
+              title="View Details"
+              onPress={() => {
+                selectItemHandler(itemData.item.id, itemData.item.title);
+              }}
+            />
+          </RecordItem>
+        )}
+      />
+      <RecordButton
+        onPress={() => {
+          props.navigation.navigate('RecordForm');
+        }}
+      />
+    </View>
   );
 };
 

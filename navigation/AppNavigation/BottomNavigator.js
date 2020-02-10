@@ -4,7 +4,9 @@ import Profile from '../../screens/TabScreens/Profile';
 import Library from '../../screens/TabScreens/Library';
 import Weather from '../../screens/TabScreens/Weather';
 import Scores from '../../screens/TabScreens/Scores';
-import Home from '../../screens/TabScreens/Home';
+import Home from '../../screens/TabScreens/HomeScreens/Home';
+import RecordDetail from '../../screens/TabScreens/HomeScreens/RecordDetail';
+import RecordForm from '../../screens/TabScreens/HomeScreens/RecordForm';
 import Colors from '../../constants/Colors';
 import defaultNavOptions from '../DefaultNavOptions';
 
@@ -15,12 +17,48 @@ import {
 } from 'react-navigation-tabs';
 import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
 import {createStackNavigator} from 'react-navigation-stack';
-import RecordDetail from '../../screens/TabScreens/RecordDetail';
+
+const ProfileNavigator = createStackNavigator(
+  {
+    Profile: Profile,
+  },
+  {
+    defaultNavigationOptions: defaultNavOptions,
+  },
+);
+
+const LibraryNavigator = createStackNavigator(
+  {
+    Library: Library,
+  },
+  {
+    defaultNavigationOptions: defaultNavOptions,
+  },
+);
 
 const HomeNavigator = createStackNavigator(
   {
     Home: Home,
+    RecordForm: RecordForm,
     Record: RecordDetail,
+  },
+  {
+    defaultNavigationOptions: defaultNavOptions,
+  },
+);
+
+const ScoresNavigator = createStackNavigator(
+  {
+    Scores: Scores,
+  },
+  {
+    defaultNavigationOptions: defaultNavOptions,
+  },
+);
+
+const WeatherNavigator = createStackNavigator(
+  {
+    Weather: Weather,
   },
   {
     defaultNavigationOptions: defaultNavOptions,
@@ -29,7 +67,7 @@ const HomeNavigator = createStackNavigator(
 
 const tabScreenConfig = {
   Profile: {
-    screen: Profile,
+    screen: ProfileNavigator,
     navigationOptions: {
       tabBarIcon: tabInfo => {
         return <Icon name="ios-person" size={25} color={tabInfo.tintColor} />;
@@ -48,7 +86,7 @@ const tabScreenConfig = {
     },
   },
   Library: {
-    screen: Library,
+    screen: LibraryNavigator,
     navigationOptions: {
       tabBarIcon: tabInfo => {
         return <Icon name="ios-book" size={25} color={tabInfo.tintColor} />;
@@ -86,7 +124,7 @@ const tabScreenConfig = {
     },
   },
   Scores: {
-    screen: Scores,
+    screen: ScoresNavigator,
     navigationOptions: {
       tabBarIcon: tabInfo => {
         return (
@@ -107,7 +145,7 @@ const tabScreenConfig = {
     },
   },
   Weather: {
-    screen: Weather,
+    screen: WeatherNavigator,
     navigationOptions: {
       tabBarIcon: tabInfo => {
         return <Icon name="ios-sunny" size={25} color={tabInfo.tintColor} />;

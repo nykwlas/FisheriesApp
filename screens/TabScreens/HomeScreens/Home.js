@@ -93,7 +93,7 @@ const Home = props => {
   }
 
   return (
-    <View>
+    <View style={styles.container}>
       <FlatList
         onRefresh={loadRecords}
         refreshing={isRefreshing}
@@ -103,7 +103,7 @@ const Home = props => {
           <RecordItem
             image={itemData.item.imageUrl}
             title={itemData.item.title}
-            price={itemData.item.date}
+            date={itemData.item.date}
             onSelect={() => {
               selectItemHandler(itemData.item.id, itemData.item.title);
             }}>
@@ -146,17 +146,13 @@ Home.navigationOptions = navData => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  signOut: {
-    color: '#F57C00',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
   },
   centered: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

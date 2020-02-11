@@ -28,7 +28,7 @@ const RecordItem = props => {
             </View>
             <View style={styles.details}>
               <Text style={styles.title}>{props.title}</Text>
-              <Text style={styles.price}>props.date</Text>
+              <Text style={styles.date}>{props.date}</Text>
             </View>
             <View style={styles.actions}>{props.children}</View>
           </View>
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginVertical: 2,
   },
-  price: {
+  date: {
     fontFamily: 'open-sans',
     fontSize: 14,
     color: '#888',

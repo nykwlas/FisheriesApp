@@ -26,6 +26,7 @@ export default (state = initialState, action) => {
         action.recordData.imageUrl,
         action.recordData.description,
         action.recordData.date,
+        action.recordData.catches,
       );
       return {
         ...state,
@@ -43,6 +44,7 @@ export default (state = initialState, action) => {
         action.recordData.imageUrl,
         action.recordData.description,
         state.userRecords[recordIndex].date,
+        action.recordData.cacthes,
       );
       const updatedUserRecords = [...state.userRecords];
       updatedUserRecords[recordIndex] = updatedProduct;

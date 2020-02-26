@@ -30,6 +30,7 @@ export const fetchRecords = () => {
             resData[key].imageUrl,
             resData[key].description,
             resData[key].date,
+            resData[key].catches,
           ),
         );
       }
@@ -63,7 +64,7 @@ export const deleteRecord = recordId => {
   };
 };
 
-export const createRecord = (title, description, imageUrl, date) => {
+export const createRecord = (title, description, imageUrl, date, catches) => {
   return async (dispatch, getState) => {
     // any async code you want!
     const token = getState().auth.token;
@@ -80,6 +81,7 @@ export const createRecord = (title, description, imageUrl, date) => {
           description,
           imageUrl,
           date,
+          catches,
           ownerId: userId,
         }),
       },
@@ -95,6 +97,7 @@ export const createRecord = (title, description, imageUrl, date) => {
         description,
         imageUrl,
         date,
+        catches,
         ownerId: userId,
       },
     });

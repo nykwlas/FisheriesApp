@@ -18,6 +18,8 @@ npm install --save @react-native-community/async-storage
 npm install --save react-native-bootsplash
 npm install --save react-native-progress-steps
 npm install react-native-picker-select
+npm install --save @react-native-community/datetimepicker
+npm install --save react-native-modal
 
 NOT USED npm install --save firebase
 	 npm install --save hoist-non-react-statics

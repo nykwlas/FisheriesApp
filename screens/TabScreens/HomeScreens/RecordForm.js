@@ -1,30 +1,79 @@
-import React, {useState, useReducer, useEffect, useCallback} from 'react';
+import React, {
+  useState,
+  useReducer,
+  useEffect,
+  useCallback,
+  Fragment,
+} from 'react';
 import {
   ActivityIndicator,
   Platform,
   TextInput,
   StyleSheet,
+  ScrollView,
   SafeAreaView,
   View,
   Text,
   Alert,
+  FlatList,
 } from 'react-native';
 import {Button} from 'react-native-elements';
+import Modal from 'react-native-modal';
 // import { Ionicons } from '@expo/vector-icons'
 // import Icon from 'react-native-vector-icons/Ionicons';
 // import {Formik} from 'formik';
 // import * as Yup from 'yup';
 import {useDispatch} from 'react-redux';
 import {ProgressSteps, ProgressStep} from 'react-native-progress-steps';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import RNPickerSelect from 'react-native-picker-select';
 import Input from '../../../components/UI/Input';
 import * as recordActions from '../../../store/actions/records';
 import Colors from '../../../constants/Colors';
 import {HeaderButtons, Item} from 'react-navigation-header-buttons';
 import HeaderButton from '../../../components/UI/HeaderButton';
+import FormRecordButton from '../../../components/UI/FormRecordButton';
 
+import {Formik} from 'formik';
+import * as Yup from 'yup';
+import FormInput from '../../../components/FormInput';
+import FormButton from '../../../components/FormButton';
+import ErrorMessage from '../../../components/ErrorMessage';
+import Catch from '../../../models/catch';
+
+const catches = [];
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
+
+const validationSchema = Yup.object().shape({
+  kind: Yup.string()
+    .label('Kind')
+    .required('Kind of fish is required')
+    .min(3, 'Must have at least 3 characters'),
+  weight: Yup.number()
+    .label('Weight')
+    .positive('Enter a positive number')
+    .truncate()
+    .required('Weight of fish is required'),
+  length: Yup.number()
+    .label('Length')
+    .positive('Enter a positive number')
+    .truncate()
+    .required('Length of fish is required'),
+  time: Yup.string()
+    .label('Time')
+    .required('Time of catch is required')
+    .min(5, 'Time must be in format HH:MM'),
+  depth: Yup.number()
+    .label('Depth')
+    .required('Depth of catch is required')
+    .positive('Enter a positive number')
+    .truncate()
+    .max(1000, 'Depth must be less than 1000 meters'),
+  method: Yup.string()
+    .label('Method')
+    .required('Method of catch is required')
+    .min(3, 'Must have at least 3 characters'),
+});
 
 const formReducer = (state, action) => {
   if (action.type === FORM_INPUT_UPDATE) {
@@ -52,7 +101,13 @@ const formReducer = (state, action) => {
 const RecordForm = props => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+  const [kindField, setKindField] = useState('');
+  const [weightField, setWeightField] = useState(0);
+  const [lengthField, setLengthField] = useState(0);
+  const [timeField, setTimeField] = useState('');
+  const [depthField, setDepthField] = useState(0);
+  const [methodField, setMethodField] = useState('');
 
   const placeholder = {
     label: 'Select a type...',
@@ -84,12 +139,6 @@ const RecordForm = props => {
   }, [error]);
 
   const submitHandler = useCallback(async () => {
-    console.log(
-      formState.inputValues.title,
-      formState.inputValues.description,
-      formState.inputValues.date,
-      formState.inputValues.imageUrl,
-    );
     if (!formState.formIsValid) {
       Alert.alert('Wrong input!', 'Please check the errors in the form.', [
         {text: 'Okay'},
@@ -105,6 +154,7 @@ const RecordForm = props => {
           formState.inputValues.description,
           formState.inputValues.imageUrl,
           formState.inputValues.date,
+          catches,
         ),
       );
       props.navigation.goBack();
@@ -134,19 +184,58 @@ const RecordForm = props => {
     [dispatchFormState],
   );
 
+  const [date, setDate] = useState(new Date(1598051730000));
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setIsModalVisible(!isModalVisible);
+  };
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setDate(currentDate);
+    setShow(Platform.OS === 'ios' ? true : false);
+    handleConfirm(currentDate);
+  };
+
+  const showMode = currentMode => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
   const showDatePicker = () => {
-    setDatePickerVisibility(true);
+    showMode('date');
   };
-  const hideDatePicker = () => {
-    setDatePickerVisibility(Platform.OS === 'ios' ? true : false);
+
+  const showTimepicker = () => {
+    showMode('time');
   };
+
   const handleConfirm = inputDate => {
     const dat = inputDate.getUTCDate();
     const month = inputDate.getUTCMonth() + 1;
     const year = inputDate.getUTCFullYear();
     const dateStr = dat + '/' + month + '/' + year;
     inputChangeHandler('date', dateStr, true);
-    hideDatePicker();
+  };
+
+  const pickerStyle = {
+    inputIOS: {
+      color: 'black',
+    },
+    inputAndroid: {
+      color: 'black',
+    },
+  };
+
+  const handleOnSubmitCatch = (values, actions) => {
+    const {kind, weight, length, time, depth, method} = values;
+    const newCatch = new Catch(time, kind, weight, length, time, depth, method);
+    catches.push(newCatch);
+    console.log(catches);
+    toggleModal();
   };
 
   if (isLoading) {
@@ -163,12 +252,18 @@ const RecordForm = props => {
         <ProgressStep label="Date">
           <View style={styles.inputDate}>
             <Button title="Select Date" onPress={showDatePicker} />
-            <DateTimePickerModal
-              isVisible={isDatePickerVisible}
-              mode="date"
-              onConfirm={handleConfirm}
-              onCancel={hideDatePicker}
-            />
+            {show && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                timeZoneOffsetInMinutes={0}
+                value={date}
+                mode={mode}
+                is24Hour={true}
+                display="default"
+                onChange={onChange}
+                maximumDate={new Date()}
+              />
+            )}
             <TextInput style={styles.text} value={formState.inputValues.date} />
           </View>
           <View style={styles.inputType}>
@@ -176,6 +271,7 @@ const RecordForm = props => {
           </View>
           <View style={styles.input}>
             <RNPickerSelect
+              style={pickerStyle}
               placeholder={placeholder}
               onValueChange={value => {
                 inputChangeHandler('title', value, true);
@@ -188,13 +284,190 @@ const RecordForm = props => {
             />
           </View>
         </ProgressStep>
-        <ProgressStep>
-          <View>
-            <Text>Second Step</Text>
+        <ProgressStep label="Catches">
+          <View style={styles.container}>
+            <View style={styles.inputDate}>
+              <Text>Add new catches:</Text>
+              <FormRecordButton
+                onPress={() => {
+                  toggleModal();
+                }}
+              />
+            </View>
+            <View style={styles.records}>
+              <FlatList
+                data={catches}
+                keyExtractor={item => item.id}
+                renderItem={itemData => (
+                  <View style={styles.catchItems}>
+                    <Text>{itemData.item.kind}</Text>
+                    <Text>{itemData.item.time}</Text>
+                    <Text>{itemData.item.length} cm</Text>
+                    <Text>{itemData.item.weight} kg</Text>
+                  </View>
+                )}
+              />
+            </View>
+            <Modal isVisible={isModalVisible} onBackdropPress={toggleModal}>
+              <ScrollView style={styles.modal}>
+                <SafeAreaView style={styles.container}>
+                  <Formik
+                    validateOnMount
+                    initialValues={{
+                      kind: kindField,
+                      weight: weightField,
+                      length: lengthField,
+                      time: timeField,
+                      depth: depthField,
+                      method: methodField,
+                    }}
+                    onSubmit={(values, actions) => {
+                      handleOnSubmitCatch(values, actions);
+                    }}
+                    validationSchema={validationSchema}>
+                    {({
+                      handleChange,
+                      values,
+                      handleSubmit,
+                      errors,
+                      isValid,
+                      touched,
+                      handleBlur,
+                    }) => (
+                      <Fragment>
+                        <View style={styles.textContainer}>
+                          <Text style={styles.text}>Kind of Fish</Text>
+                        </View>
+                        <View style={styles.inputModal}>
+                          <FormInput
+                            name="kind"
+                            value={values.kind}
+                            onChangeText={
+                              (setKindField(values.kind), handleChange('kind'))
+                            }
+                            placeholder="Kind..."
+                            onBlur={handleBlur('kind')}
+                          />
+                        </View>
+                        <ErrorMessage
+                          errorValue={touched.kind && errors.kind}
+                        />
+                        <View style={styles.textContainer}>
+                          <Text style={styles.text}>Weight of Fish (Kg)</Text>
+                        </View>
+                        <View style={styles.inputModal}>
+                          <FormInput
+                            name="weight"
+                            value={values.weight}
+                            onChangeText={
+                              (setWeightField(values.weight),
+                              handleChange('weight'))
+                            }
+                            placeholder="Weight..."
+                            onBlur={handleBlur('weight')}
+                          />
+                        </View>
+                        <ErrorMessage
+                          errorValue={touched.weight && errors.weight}
+                        />
+                        <View style={styles.textContainer}>
+                          <Text style={styles.text}>Length of Fish (cm)</Text>
+                        </View>
+                        <View style={styles.inputModal}>
+                          <FormInput
+                            name="length"
+                            value={values.length}
+                            onChangeText={
+                              (setLengthField(values.length),
+                              handleChange('length'))
+                            }
+                            placeholder="Lenght..."
+                            onBlur={handleBlur('length')}
+                          />
+                        </View>
+                        <ErrorMessage
+                          errorValue={touched.length && errors.length}
+                        />
+                        <View style={styles.textContainer}>
+                          <Text style={styles.text}>Time of Catch</Text>
+                        </View>
+                        <View style={styles.inputModal}>
+                          <FormInput
+                            name="time"
+                            value={values.time}
+                            onChangeText={
+                              (setTimeField(values.time), handleChange('time'))
+                            }
+                            placeholder="Time..."
+                            onBlur={handleBlur('time')}
+                          />
+                        </View>
+                        <ErrorMessage
+                          errorValue={touched.time && errors.time}
+                        />
+                        <View style={styles.textContainer}>
+                          <Text style={styles.text}>Depth of Catch</Text>
+                        </View>
+                        <View style={styles.inputModal}>
+                          <FormInput
+                            name="depth"
+                            value={values.depth}
+                            onChangeText={
+                              (setDepthField(values.depth),
+                              handleChange('depth'))
+                            }
+                            placeholder="Depth..."
+                            onBlur={handleBlur('depth')}
+                          />
+                        </View>
+                        <ErrorMessage
+                          errorValue={touched.depth && errors.depth}
+                        />
+                        <View style={styles.textContainer}>
+                          <Text style={styles.text}>Method of Catch</Text>
+                        </View>
+                        <View style={styles.inputModal}>
+                          <FormInput
+                            name="method"
+                            value={values.method}
+                            onChangeText={
+                              (setMethodField(values.method),
+                              handleChange('method'))
+                            }
+                            placeholder="Your Method..."
+                            onBlur={handleBlur('method')}
+                          />
+                        </View>
+                        <ErrorMessage
+                          errorValue={touched.method && errors.method}
+                        />
+                        <View style={styles.buttonContainer}>
+                          <FormButton
+                            buttonType="outline"
+                            onPress={handleSubmit}
+                            title="Add Catch"
+                            buttonColor="#F57C00"
+                            disabled={!isValid}
+                          />
+                          <FormButton
+                            buttonType="outline"
+                            onPress={toggleModal}
+                            title="Cancel"
+                            buttonColor="#F57C00"
+                          />
+                        </View>
+                        <ErrorMessage errorValue={errors.general} />
+                      </Fragment>
+                    )}
+                  </Formik>
+                </SafeAreaView>
+              </ScrollView>
+            </Modal>
           </View>
         </ProgressStep>
-        <ProgressStep onSubmit={submitHandler}>
+        <ProgressStep label="Submit" onSubmit={submitHandler}>
           <Input
+            style={styles.description}
             id="description"
             label="Description"
             errorText="Please enter a valid description!"
@@ -239,6 +512,19 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  buttonContainer: {
+    marginTop: 10,
+    marginHorizontal: 25,
+    // marginVertical: ,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  description: {
+    marginLeft: '20%',
+    width: 200,
+    maxWidth: 250,
+  },
   inputDate: {
     margin: 15,
     flexDirection: 'row',
@@ -246,8 +532,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   text: {
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: 'open-sans-bold',
+  },
+  textContainer: {
+    marginLeft: 30,
   },
   input: {
     marginLeft: 65,
@@ -261,6 +550,22 @@ const styles = StyleSheet.create({
     width: 200,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  modal: {
+    flex: 1,
+    marginHorizontal: '10%',
+    // marginVertical: 150,
+    backgroundColor: '#fff',
+    // alignItems: 'center',
+    // justifyContent: 'center',
+  },
+  inputModal: {
+    // marginBottom: 5,
+  },
+  catchItems: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    margin: 15,
   },
 });
 

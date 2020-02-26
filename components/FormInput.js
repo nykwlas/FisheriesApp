@@ -21,17 +21,26 @@ const FormInput = ({
       placeholderTextColor="grey"
       name={name}
       placeholder={placeholder}
-      style={styles.input}
+      inputStyle={styles.input}
+      // containerStyle={styles.container}
     />
   </View>
 );
 
 const styles = StyleSheet.create({
+  input: {
+    fontSize: 15,
+  },
+  // container: {
+  //   height: 20,
+  //   width: 200,
+  // },
   inputContainer: {
-    margin: 15,
+    margin: 10,
+    marginHorizontal: 20,
   },
   iconStyle: {
-    marginRight: 10,
+    // marginRight: 10,
   },
 });
 

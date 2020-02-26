@@ -24,6 +24,10 @@ const ProfileNavigator = createStackNavigator(
   },
   {
     defaultNavigationOptions: defaultNavOptions,
+    // headerMode: 'none',
+    // navigationOptions: {
+    //   headerVisible: false,
+    // },
   },
 );
 
@@ -33,6 +37,10 @@ const LibraryNavigator = createStackNavigator(
   },
   {
     defaultNavigationOptions: defaultNavOptions,
+    // headerMode: 'none',
+    // navigationOptions: {
+    //   headerVisible: false,
+    // },
   },
 );
 
@@ -44,6 +52,10 @@ const HomeNavigator = createStackNavigator(
   },
   {
     defaultNavigationOptions: defaultNavOptions,
+    // headerMode: 'none',
+    // navigationOptions: {
+    //   headerVisible: false,
+    // },
   },
 );
 
@@ -53,6 +65,10 @@ const ScoresNavigator = createStackNavigator(
   },
   {
     defaultNavigationOptions: defaultNavOptions,
+    // headerMode: 'none',
+    // navigationOptions: {
+    //   headerVisible: false,
+    // },
   },
 );
 
@@ -62,6 +78,10 @@ const WeatherNavigator = createStackNavigator(
   },
   {
     defaultNavigationOptions: defaultNavOptions,
+    // headerMode: 'none',
+    // navigationOptions: {
+    //   headerVisible: false,
+    // },
   },
 );
 

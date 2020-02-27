@@ -1,5 +1,6 @@
 import React from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
+
 import {HeaderButtons, Item} from 'react-navigation-header-buttons';
 
 import HeaderButton from '../../components/UI/HeaderButton';

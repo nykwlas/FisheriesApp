@@ -1,8 +1,10 @@
 import React, {useEffect, useState, useCallback} from 'react';
 import {View, Text, StyleSheet, Platform, Switch, Button} from 'react-native';
-import {HeaderButtons, Item} from 'react-navigation-header-buttons';
-import HeaderButton from '../components/UI/HeaderButton';
 import {useDispatch} from 'react-redux';
+
+import {HeaderButtons, Item} from 'react-navigation-header-buttons';
+
+import HeaderButton from '../components/UI/HeaderButton';
 import Colors from '../constants/Colors';
 
 const FilterSwitch = props => {

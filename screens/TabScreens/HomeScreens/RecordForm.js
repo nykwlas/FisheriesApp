@@ -8,7 +8,6 @@ import React, {
 import {
   ActivityIndicator,
   Platform,
-  TextInput,
   StyleSheet,
   ScrollView,
   SafeAreaView,
@@ -17,29 +16,28 @@ import {
   Alert,
   FlatList,
 } from 'react-native';
+import {useDispatch} from 'react-redux';
+
 import {Button} from 'react-native-elements';
 import Modal from 'react-native-modal';
-// import { Ionicons } from '@expo/vector-icons'
-// import Icon from 'react-native-vector-icons/Ionicons';
-// import {Formik} from 'formik';
-// import * as Yup from 'yup';
-import {useDispatch} from 'react-redux';
+import {HeaderButtons, Item} from 'react-navigation-header-buttons';
 import {ProgressSteps, ProgressStep} from 'react-native-progress-steps';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RNPickerSelect from 'react-native-picker-select';
+
 import Input from '../../../components/UI/Input';
-import * as recordActions from '../../../store/actions/records';
-import Colors from '../../../constants/Colors';
-import {HeaderButtons, Item} from 'react-navigation-header-buttons';
 import HeaderButton from '../../../components/UI/HeaderButton';
 import FormRecordButton from '../../../components/UI/FormRecordButton';
-
-import {Formik} from 'formik';
-import * as Yup from 'yup';
 import FormInput from '../../../components/FormInput';
 import FormButton from '../../../components/FormButton';
 import ErrorMessage from '../../../components/ErrorMessage';
 import Catch from '../../../models/catch';
+
+import * as recordActions from '../../../store/actions/records';
+import Colors from '../../../constants/Colors';
+
+import {Formik} from 'formik';
+import * as Yup from 'yup';
 
 const catches = [];
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
@@ -140,9 +138,11 @@ const RecordForm = props => {
 
   const submitHandler = useCallback(async () => {
     if (!formState.formIsValid) {
-      Alert.alert('Wrong input!', 'Please check the errors in the form.', [
+      Alert.alert(
+        'Something is Wrong!',
+        'Please fill all inputs  in the form.',
         {text: 'Okay'},
-      ]);
+      );
       return;
     }
     setError(null);
@@ -197,7 +197,7 @@ const RecordForm = props => {
     const currentDate = selectedDate || date;
     setDate(currentDate);
     setShow(Platform.OS === 'ios' ? true : false);
-    handleConfirm(currentDate);
+    handleConfirmDate(currentDate);
   };
 
   const showMode = currentMode => {
@@ -213,7 +213,7 @@ const RecordForm = props => {
     showMode('time');
   };
 
-  const handleConfirm = inputDate => {
+  const handleConfirmDate = inputDate => {
     const dat = inputDate.getUTCDate();
     const month = inputDate.getUTCMonth() + 1;
     const year = inputDate.getUTCFullYear();
@@ -264,7 +264,7 @@ const RecordForm = props => {
                 maximumDate={new Date()}
               />
             )}
-            <TextInput style={styles.text} value={formState.inputValues.date} />
+            <Text style={styles.text}>{formState.inputValues.date}</Text>
           </View>
           <View style={styles.inputType}>
             <Text style={styles.text}>Select type of Fishing</Text>
@@ -475,8 +475,6 @@ const RecordForm = props => {
             returnKeyType="done"
             autoCapitalize="sentences"
             autoCorrect
-            // multiline
-            // numberOfLines={3}
             onInputChange={inputChangeHandler}
             initialValue={''}
             initiallyValid={false}
@@ -515,7 +513,6 @@ const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: 10,
     marginHorizontal: 25,
-    // marginVertical: ,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -554,10 +551,7 @@ const styles = StyleSheet.create({
   modal: {
     flex: 1,
     marginHorizontal: '10%',
-    // marginVertical: 150,
     backgroundColor: '#fff',
-    // alignItems: 'center',
-    // justifyContent: 'center',
   },
   inputModal: {
     // marginBottom: 5,

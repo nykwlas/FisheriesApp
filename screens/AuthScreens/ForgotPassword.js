@@ -1,12 +1,14 @@
 import React, {Fragment} from 'react';
 import {Text, SafeAreaView, View, StyleSheet} from 'react-native';
+import {useDispatch} from 'react-redux';
+
 import {Formik} from 'formik';
 import * as Yup from 'yup';
+
 import FormInput from '../../components/FormInput';
 import FormButton from '../../components/FormButton';
 import ErrorMessage from '../../components/ErrorMessage';
 import * as authActions from '../../store/actions/auth';
-import {useDispatch} from 'react-redux';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()

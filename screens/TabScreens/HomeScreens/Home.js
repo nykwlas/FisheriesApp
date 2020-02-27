@@ -7,14 +7,16 @@ import {
   FlatList,
   ActivityIndicator,
 } from 'react-native';
+import {useSelector, useDispatch} from 'react-redux';
+
 import {Button} from 'react-native-elements';
 import {HeaderButtons, Item} from 'react-navigation-header-buttons';
-import {useSelector, useDispatch} from 'react-redux';
+
 import HeaderButton from '../../../components/UI/HeaderButton';
+import RecordButton from '../../../components/UI/RecordButton';
 import RecordItem from '../../../components/Records/RecordItem';
 import * as recordActions from '../../../store/actions/records';
 import Colors from '../../../constants/Colors';
-import RecordButton from '../../../components/UI/RecordButton';
 
 const Home = props => {
   const [isLoading, setIsLoading] = useState(false);

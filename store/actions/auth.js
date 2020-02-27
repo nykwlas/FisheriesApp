@@ -1,6 +1,4 @@
 import AsyncStorage from '@react-native-community/async-storage';
-// export const SIGNUP = 'SIGNUP';
-// export const LOGIN = 'LOGIN';
 export const AUTHENTICATE = 'AUTHENTICATE';
 export const LOGOUT = 'LOGOUT';
 

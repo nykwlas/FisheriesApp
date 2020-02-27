@@ -15,8 +15,8 @@ const rootReducer = combineReducers({
 
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 
-let fakeApiCallWithoutBadNetwork = ms =>
-  new Promise(resolve => setTimeout(resolve, ms));
+// let fakeApiCallWithoutBadNetwork = ms =>
+//   new Promise(resolve => setTimeout(resolve, ms));
 
 export default function App() {
   const init = async () => {
@@ -25,7 +25,6 @@ export default function App() {
 
   useEffect(() => {
     init().finally(() => {
-      // without fadeout: RNBootSplash.hide()
       RNBootSplash.hide({duration: 250});
     });
   }, []);

@@ -1,20 +1,21 @@
 import React from 'react';
 import {Text, Platform} from 'react-native';
+
 import Profile from '../../screens/TabScreens/Profile';
 import Library from '../../screens/TabScreens/Library';
 import Weather from '../../screens/TabScreens/Weather';
 import Scores from '../../screens/TabScreens/Scores';
 import Home from '../../screens/TabScreens/HomeScreens/Home';
+
 import RecordDetail from '../../screens/TabScreens/HomeScreens/RecordDetail';
 import RecordForm from '../../screens/TabScreens/HomeScreens/RecordForm';
+
 import Colors from '../../constants/Colors';
 import defaultNavOptions from '../DefaultNavOptions';
 
 import Icon from 'react-native-vector-icons/Ionicons';
-import {
-  createBottomTabNavigator,
-  // createMaterialTopTabNavigator,
-} from 'react-navigation-tabs';
+
+import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs';
 import {createStackNavigator} from 'react-navigation-stack';
 
@@ -24,10 +25,6 @@ const ProfileNavigator = createStackNavigator(
   },
   {
     defaultNavigationOptions: defaultNavOptions,
-    // headerMode: 'none',
-    // navigationOptions: {
-    //   headerVisible: false,
-    // },
   },
 );
 
@@ -37,10 +34,6 @@ const LibraryNavigator = createStackNavigator(
   },
   {
     defaultNavigationOptions: defaultNavOptions,
-    // headerMode: 'none',
-    // navigationOptions: {
-    //   headerVisible: false,
-    // },
   },
 );
 
@@ -52,10 +45,6 @@ const HomeNavigator = createStackNavigator(
   },
   {
     defaultNavigationOptions: defaultNavOptions,
-    // headerMode: 'none',
-    // navigationOptions: {
-    //   headerVisible: false,
-    // },
   },
 );
 
@@ -65,10 +54,6 @@ const ScoresNavigator = createStackNavigator(
   },
   {
     defaultNavigationOptions: defaultNavOptions,
-    // headerMode: 'none',
-    // navigationOptions: {
-    //   headerVisible: false,
-    // },
   },
 );
 
@@ -78,10 +63,6 @@ const WeatherNavigator = createStackNavigator(
   },
   {
     defaultNavigationOptions: defaultNavOptions,
-    // headerMode: 'none',
-    // navigationOptions: {
-    //   headerVisible: false,
-    // },
   },
 );
 
@@ -92,13 +73,10 @@ const tabScreenConfig = {
       tabBarIcon: tabInfo => {
         return <Icon name="ios-person" size={25} color={tabInfo.tintColor} />;
       },
-      // tabBarOptions: {
-      //   showIcon: true,
-      //   // showLabel: false,
-      // },
       tabBarColor: Colors.primaryColor,
       tabBarLabel:
         Platform.OS === 'android' ? (
+          // eslint-disable-next-line react-native/no-inline-styles
           <Text style={{fontFamily: 'open-sans-bold'}}>Profile</Text>
         ) : (
           'Profile'
@@ -111,13 +89,10 @@ const tabScreenConfig = {
       tabBarIcon: tabInfo => {
         return <Icon name="ios-book" size={25} color={tabInfo.tintColor} />;
       },
-      // tabBarOptions: {
-      //   showIcon: true,
-      //   // showLabel: false,
-      // },
       tabBarColor: Colors.primaryColor,
       tabBarLabel:
         Platform.OS === 'android' ? (
+          // eslint-disable-next-line react-native/no-inline-styles
           <Text style={{fontFamily: 'open-sans-bold'}}>Library</Text>
         ) : (
           'Library'
@@ -130,13 +105,10 @@ const tabScreenConfig = {
       tabBarIcon: tabInfo => {
         return <Icon name="ios-home" size={25} color={tabInfo.tintColor} />;
       },
-      // tabBarOptions: {
-      //   showIcon: true,
-      //   // showLabel: false,
-      // },
       tabBarColor: Colors.primaryColor,
       tabBarLabel:
         Platform.OS === 'android' ? (
+          // eslint-disable-next-line react-native/no-inline-styles
           <Text style={{fontFamily: 'open-sans-bold'}}>Home</Text>
         ) : (
           'Home'
@@ -151,13 +123,10 @@ const tabScreenConfig = {
           <Icon name="ios-star-outline" size={25} color={tabInfo.tintColor} />
         );
       },
-      // tabBarOptions: {
-      //   showIcon: true,
-      //   // showLabel: false,
-      // },
       tabBarColor: Colors.primaryColor,
       tabBarLabel:
         Platform.OS === 'android' ? (
+          // eslint-disable-next-line react-native/no-inline-styles
           <Text style={{fontFamily: 'open-sans-bold'}}>Scores</Text>
         ) : (
           'Scores'
@@ -170,13 +139,10 @@ const tabScreenConfig = {
       tabBarIcon: tabInfo => {
         return <Icon name="ios-sunny" size={25} color={tabInfo.tintColor} />;
       },
-      // tabBarOptions: {
-      //   showIcon: true,
-      //   // showLabel: false,
-      // },
       tabBarColor: Colors.primaryColor,
       tabBarLabel:
         Platform.OS === 'android' ? (
+          // eslint-disable-next-line react-native/no-inline-styles
           <Text style={{fontFamily: 'open-sans-bold'}}>Weather</Text>
         ) : (
           'Weather'
@@ -188,11 +154,8 @@ const tabScreenConfig = {
 const HomeTabNavigator =
   Platform.OS === 'android'
     ? createMaterialBottomTabNavigator(tabScreenConfig, {
-        // swipeEnabled: true,
-        // tabBarPosition: 'bottom',
         initialRouteName: 'Home',
         activeTintColor: 'white',
-        // shifting: true,
         barStyle: {
           backgroundColor: Colors.primaryColor,
         },

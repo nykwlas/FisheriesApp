@@ -1,11 +1,12 @@
 import React, {useState, Fragment} from 'react';
 import {StyleSheet, SafeAreaView, View, TouchableOpacity} from 'react-native';
+import {useDispatch} from 'react-redux';
+
 import {Button, CheckBox} from 'react-native-elements';
-// import { Ionicons } from '@expo/vector-icons'
 import Icon from 'react-native-vector-icons/Ionicons';
+
 import {Formik} from 'formik';
 import * as Yup from 'yup';
-import {useDispatch} from 'react-redux';
 
 import FormInput from '../../components/FormInput';
 import FormButton from '../../components/FormButton';
@@ -70,7 +71,6 @@ const Signup = props => {
       await dispatch(action);
       props.navigation.navigate('App');
     } catch (error) {
-      // console.error(error)
       actions.setFieldError('general', error.message);
     } finally {
       actions.setSubmitting(false);

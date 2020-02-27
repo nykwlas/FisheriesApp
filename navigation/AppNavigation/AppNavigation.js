@@ -1,15 +1,17 @@
 import React from 'react';
-import {createStackNavigator} from 'react-navigation-stack';
-import Colors from '../../constants/Colors';
-import {createDrawerNavigator, DrawerItems} from 'react-navigation-drawer';
 import {StyleSheet, Platform, SafeAreaView, Button, View} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
 import {useDispatch} from 'react-redux';
 
+import {createStackNavigator} from 'react-navigation-stack';
+import {createDrawerNavigator, DrawerItems} from 'react-navigation-drawer';
+
+import Icon from 'react-native-vector-icons/Ionicons';
+
+import Colors from '../../constants/Colors';
 import * as authActions from '../../store/actions/auth';
-import HomeTabNavigator from './BottomNavigator';
 import Settings from '../../screens/Settings';
 import defaultNavOptions from '../DefaultNavOptions';
+import HomeTabNavigator from './BottomNavigation';
 
 const SettingsNavigator = createStackNavigator(
   {
@@ -44,7 +46,6 @@ const AppNavigation = createDrawerNavigator(
       },
     },
     Settings: SettingsNavigator,
-    // Admin: AdminNavigator,
   },
   {
     contentOptions: {
@@ -73,7 +74,10 @@ const AppNavigation = createDrawerNavigator(
 );
 
 const styles = StyleSheet.create({
-  button: {flex: 1, paddingTop: 20},
+  button: {
+    flex: 1,
+    paddingTop: 20,
+  },
 });
 
 export default AppNavigation;

@@ -1,9 +1,10 @@
 import React, {useEffect} from 'react';
 import {ActivityIndicator, StyleSheet, View} from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
 import {useDispatch} from 'react-redux';
-import Colors from '../../constants/Colors';
 
+import AsyncStorage from '@react-native-community/async-storage';
+
+import Colors from '../../constants/Colors';
 import * as authActions from '../../store/actions/auth';
 
 const Initial = props => {
@@ -13,7 +14,6 @@ const Initial = props => {
     const tryLogin = async () => {
       const userData = await AsyncStorage.getItem('userData');
       if (!userData) {
-        // const data = await fakeApiCallWithoutBadNetwork(2000);
         props.navigation.navigate('Auth');
         return;
       }
@@ -22,13 +22,11 @@ const Initial = props => {
       const expirationDate = new Date(expiryDate);
 
       if (expirationDate <= new Date() || !token || !userId) {
-        // const data = await fakeApiCallWithoutBadNetwork(2000);
         props.navigation.navigate('Auth');
         return;
       }
 
       const expirationTime = expirationDate.getTime() - new Date().getTime();
-      // const data = await fakeApiCallWithoutBadNetwork(2000);
       props.navigation.navigate('App');
       dispatch(authActions.authenticate(userId, token, expirationTime));
     };

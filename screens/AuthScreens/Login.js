@@ -1,11 +1,13 @@
 import React, {useState, Fragment} from 'react';
 import {StyleSheet, SafeAreaView, View, TouchableOpacity} from 'react-native';
+import {useDispatch} from 'react-redux';
+
 import {Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {HideWithKeyboard} from 'react-native-hide-with-keyboard';
+
 import {Formik} from 'formik';
 import * as Yup from 'yup';
-import {HideWithKeyboard} from 'react-native-hide-with-keyboard';
-import {useDispatch} from 'react-redux';
 
 import FormInput from '../../components/FormInput';
 import FormButton from '../../components/FormButton';

@@ -1,25 +1,11 @@
-import React /*, {useState, useEffect, useCallback}*/ from 'react';
+import React from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
+
 import {HeaderButtons, Item} from 'react-navigation-header-buttons';
-// import {SearchBar} from 'react-native-elements';
-// import {useDispatch} from 'react-redux';
+
 import HeaderButton from '../../components/UI/HeaderButton';
 
 const Library = props => {
-  // const [search, setSearch] = useState('');
-
-  // const dispatch = useDispatch();
-
-  // const searchItem = useCallback(searchData => {
-  //   setSearch(searchData);
-  //   // dispatch();
-  // }, []);
-
-  // useEffect(() => {
-  //   props.navigation.setParams({search: search, onChange: searchItem});
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [search, searchItem]);
-
   return (
     <View style={styles.container}>
       <Text>Library</Text>
@@ -28,7 +14,6 @@ const Library = props => {
 };
 
 Library.navigationOptions = navData => {
-  // const change = navData.navigation.getParam('onChange');
   return {
     headerTitle: 'Library',
     headerLeft: () => (
@@ -42,16 +27,6 @@ Library.navigationOptions = navData => {
         />
       </HeaderButtons>
     ),
-    // headerRight: () => (
-    //   <SearchBar
-    //     placeholder="Type Here..."
-    //     onChangeText={value => {
-    //       console.log('changed');
-    //       change(value);
-    //     }}
-    //     value={navData.navigation.getParam('search')}
-    //   />
-    // ),
   };
 };
 

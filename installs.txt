@@ -33,4 +33,3 @@ npm start --reset-cache
 
 npm install --save @react-native-firebase/app 
 react-native-firebase @react-native-firebase/firestore @react-native-firebase/auth
-

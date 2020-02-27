@@ -101,10 +101,10 @@ const RecordForm = props => {
   const [error, setError] = useState();
 
   const [kindField, setKindField] = useState('');
-  const [weightField, setWeightField] = useState(0);
-  const [lengthField, setLengthField] = useState(0);
+  const [weightField, setWeightField] = useState('');
+  const [lengthField, setLengthField] = useState('');
   const [timeField, setTimeField] = useState('');
-  const [depthField, setDepthField] = useState(0);
+  const [depthField, setDepthField] = useState('');
   const [methodField, setMethodField] = useState('');
 
   const placeholder = {
@@ -120,12 +120,14 @@ const RecordForm = props => {
         'https://cdn.pixabay.com/photo/2016/10/02/22/17/red-t-shirt-1710578_1280.jpg',
       description: '',
       date: '',
+      catches: [],
     },
     inputValidities: {
       title: false,
       imageUrl: true,
       description: false,
       date: false,
+      catches: false,
     },
     formIsValid: false,
   });
@@ -141,7 +143,7 @@ const RecordForm = props => {
       Alert.alert(
         'Something is Wrong!',
         'Please fill all inputs  in the form.',
-        {text: 'Okay'},
+        [{text: 'Okay'}],
       );
       return;
     }
@@ -234,8 +236,28 @@ const RecordForm = props => {
     const {kind, weight, length, time, depth, method} = values;
     const newCatch = new Catch(time, kind, weight, length, time, depth, method);
     catches.push(newCatch);
-    console.log(catches);
+    inputChangeHandler('catches', catches, true);
     toggleModal();
+  };
+
+  const [stepOneError, setStepOneError] = useState(false);
+
+  const onNextStepOne = () => {
+    if (!formState.inputValues.title || !formState.inputValues.date) {
+      setStepOneError(true);
+    } else {
+      setStepOneError(false);
+    }
+  };
+
+  const [stepTwoError, setStepTwoError] = useState(false);
+
+  const onNextStepTwo = () => {
+    if (formState.inputValues.catches.length === 0) {
+      setStepTwoError(true);
+    } else {
+      setStepTwoError(false);
+    }
   };
 
   if (isLoading) {
@@ -248,8 +270,12 @@ const RecordForm = props => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ProgressSteps>
-        <ProgressStep label="Date">
+      <ProgressSteps
+        activeStepIconBorderColor="#03A9F4"
+        completedStepIconColor="#03A9F4"
+        completedProgressBarColor="#03A9F4"
+        activeLabelColor="#03A9F4">
+        <ProgressStep label="Date" onNext={onNextStepOne} errors={stepOneError}>
           <View style={styles.inputDate}>
             <Button title="Select Date" onPress={showDatePicker} />
             {show && (
@@ -271,6 +297,7 @@ const RecordForm = props => {
           </View>
           <View style={styles.input}>
             <RNPickerSelect
+              value={formState.inputValues.title}
               style={pickerStyle}
               placeholder={placeholder}
               onValueChange={value => {
@@ -284,7 +311,10 @@ const RecordForm = props => {
             />
           </View>
         </ProgressStep>
-        <ProgressStep label="Catches">
+        <ProgressStep
+          label="Catches"
+          onNext={onNextStepTwo}
+          errors={stepTwoError}>
           <View style={styles.container}>
             <View style={styles.inputDate}>
               <Text>Add new catches:</Text>
@@ -294,7 +324,7 @@ const RecordForm = props => {
                 }}
               />
             </View>
-            <View style={styles.records}>
+            <SafeAreaView style={styles.container}>
               <FlatList
                 data={catches}
                 keyExtractor={item => item.id}
@@ -307,7 +337,7 @@ const RecordForm = props => {
                   </View>
                 )}
               />
-            </View>
+            </SafeAreaView>
             <Modal isVisible={isModalVisible} onBackdropPress={toggleModal}>
               <ScrollView style={styles.modal}>
                 <SafeAreaView style={styles.container}>

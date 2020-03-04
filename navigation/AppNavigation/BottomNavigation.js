@@ -41,7 +41,7 @@ const HomeNavigator = createStackNavigator(
   {
     Home: Home,
     RecordForm: RecordForm,
-    Record: RecordDetail,
+    RecordDetail: RecordDetail,
   },
   {
     defaultNavigationOptions: defaultNavOptions,

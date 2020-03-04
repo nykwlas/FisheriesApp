@@ -1,4 +1,5 @@
 import Record from '../../models/record';
+import Catch from '../../models/catch';
 
 export const DELETE_RECORD = 'DELETE_RECORD';
 export const CREATE_RECORD = 'CREATE_RECORD';
@@ -20,8 +21,21 @@ export const fetchRecords = () => {
 
       const resData = await response.json();
       const loadedRecords = [];
-
       for (const key in resData) {
+        const catches = [];
+        for (const key2 in resData[key].catches) {
+          catches.push(
+            new Catch(
+              key,
+              resData[key].catches[key2].kind,
+              resData[key].catches[key2].weight,
+              resData[key].catches[key2].length,
+              resData[key].catches[key2].time,
+              resData[key].catches[key2].depth,
+              resData[key].catches[key2].method,
+            ),
+          );
+        }
         loadedRecords.push(
           new Record(
             key,
@@ -30,7 +44,7 @@ export const fetchRecords = () => {
             resData[key].imageUrl,
             resData[key].description,
             resData[key].date,
-            resData[key].catches,
+            catches,
           ),
         );
       }

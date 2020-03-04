@@ -106,6 +106,7 @@ const RecordForm = props => {
   const [timeField, setTimeField] = useState('');
   const [depthField, setDepthField] = useState('');
   const [methodField, setMethodField] = useState('');
+  const [description, setDescription] = useState('');
 
   const placeholder = {
     label: 'Select a type...',
@@ -505,9 +506,10 @@ const RecordForm = props => {
             returnKeyType="done"
             autoCapitalize="sentences"
             autoCorrect
+            onInputChangeSet={setDescription}
             onInputChange={inputChangeHandler}
-            initialValue={''}
-            initiallyValid={false}
+            initialValue={description}
+            initiallyValid={description === '' ? false : true}
             required
             minLength={5}
           />

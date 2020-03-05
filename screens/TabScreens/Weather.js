@@ -74,6 +74,7 @@ const WeatherForecast = props => {
     try {
       await dispatch(weatherActions.fetchWeatherData(146669));
     } catch (err) {
+      console.log(err.message);
       setError(err.message);
     }
     setIsRefreshing(false);
@@ -86,6 +87,7 @@ const WeatherForecast = props => {
     try {
       await dispatch(weatherActions.fetchForecastData(146669));
     } catch (err) {
+      console.log(err.message);
       setError(err.message);
     }
     setIsRefreshing(false);
@@ -101,17 +103,17 @@ const WeatherForecast = props => {
     return true;
   };
 
-  useEffect(() => {
-    const willFocusSub = props.navigation.addListener(
-      'willFocus',
-      (loadWeather, loadForecast),
-    );
+  // useEffect(() => {
+  //   const willFocusSub = props.navigation.addListener(
+  //     'willFocus',
+  //     (loadWeather, loadForecast),
+  //   );
 
-    return () => {
-      willFocusSub.remove();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loadWeather, loadForecast]);
+  //   return () => {
+  //     willFocusSub.remove();
+  //   };
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [loadWeather, loadForecast]);
 
   useEffect(() => {
     setIsLoading(true);

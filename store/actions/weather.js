@@ -17,7 +17,7 @@ export const fetchWeatherData = id => {
   return async (dispatch, getState) => {
     // const currentWeather = getState().weather.currentWeather;
     try {
-      const url = `http://api.openweathermap.org/data/2.5/weather?id=${id}&lang=en&units=metric&APPID=${secret_token}`;
+      const url = `https://api.openweathermap.org/data/2.5/weather?id=${id}&lang=en&units=metric&APPID=${secret_token}`;
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error('Something went wrong!');
@@ -39,7 +39,7 @@ export const fetchForecastData = id => {
   return async (dispatch, getState) => {
     // const currentWeather = getState().weather.currentWeather;
     try {
-      const url = `http://api.openweathermap.org/data/2.5/forecast?id=${id}&lang=en&units=metric&APPID=${secret_token}`;
+      const url = `https://api.openweathermap.org/data/2.5/forecast?id=${id}&lang=en&units=metric&APPID=${secret_token}`;
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error('Something went wrong!');

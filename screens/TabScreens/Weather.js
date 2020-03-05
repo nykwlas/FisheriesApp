@@ -115,19 +115,20 @@ const WeatherForecast = props => {
 
   useEffect(() => {
     setIsLoading(true);
-    loadForecast();
-    loadWeather().then(() => {
-      setIsLoading(false);
+    loadForecast().then(() => {
+      loadWeather().then(() => {
+        setIsLoading(false);
+      });
     });
   }, [dispatch, loadForecast, loadWeather]);
 
   if (error) {
     return (
-      <View style={styles.centered}>
+      <View style={styles.center}>
         <Text>An error occurred!</Text>
         <Button
           title="Try again"
-          onPress={loadWeather}
+          onPress={(loadWeather, loadForecast)}
           color={Colors.primary}
         />
       </View>
@@ -136,7 +137,7 @@ const WeatherForecast = props => {
 
   if (isLoading || isEmpty(weatherData) || isEmpty(forecastData)) {
     return (
-      <View style={styles.centered}>
+      <View style={styles.center}>
         <ActivityIndicator size="large" color={Colors.primary} />
       </View>
     );
@@ -358,6 +359,10 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     paddingVertical: 5,
     height: 120,
+  },
+  center: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   centered: {
     justifyContent: 'flex-start',

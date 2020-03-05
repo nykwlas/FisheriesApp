@@ -39,7 +39,7 @@ import Colors from '../../../constants/Colors';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 
-const catches = [];
+let catches = [];
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 
 const validationSchema = Yup.object().shape({
@@ -164,7 +164,7 @@ const RecordForm = props => {
     } catch (err) {
       setError(err.message);
     }
-
+    catches = [];
     setIsLoading(false);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

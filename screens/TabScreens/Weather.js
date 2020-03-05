@@ -7,14 +7,16 @@ import {
   Dimensions,
   StyleSheet,
   ActivityIndicator,
-  StatusBar,
+  Platform,
   Image,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
+import {HeaderButtons, Item} from 'react-navigation-header-buttons';
+
+import HeaderButton from '../../components/UI/HeaderButton';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Button} from 'react-native-elements';
 import Colors from '../../constants/Colors';
-// import {connect} from 'react-redux';
 import * as weatherActions from '../../store/actions/weather';
 
 const OWMIcon = require('../../assets/owm_icon.png');
@@ -60,7 +62,7 @@ function capitalizeFirstLetter(string) {
   return words.join(' ');
 }
 
-const WeatherForecast = props => {
+const Weather = props => {
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState();
@@ -103,17 +105,17 @@ const WeatherForecast = props => {
     return true;
   };
 
-  // useEffect(() => {
-  //   const willFocusSub = props.navigation.addListener(
-  //     'willFocus',
-  //     (loadWeather, loadForecast),
-  //   );
+  useEffect(() => {
+    const willFocusSub = props.navigation.addListener(
+      'willFocus',
+      (loadWeather, loadForecast),
+    );
 
-  //   return () => {
-  //     willFocusSub.remove();
-  //   };
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [loadWeather, loadForecast]);
+    return () => {
+      willFocusSub.remove();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loadWeather, loadForecast]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -229,8 +231,8 @@ const WeatherForecast = props => {
   }
 
   return (
-    <ScrollView>
-      <View style={{flex: 1, backgroundColor: '#00028a'}}>
+    <ScrollView style={{backgroundColor: '#00028a'}}>
+      <View style={{flex: 1}}>
         <View style={styles.centered}>
           <Text style={[styles.text, {fontSize: 36}]}>
             {forecastData.city.name}
@@ -334,9 +336,29 @@ const WeatherForecast = props => {
           style={[styles.container, styles.bottomWhiteBorder, styles.report]}>
           <Text style={styles.textReport}>
             {
-              'Today: Heavy rain and storm. Enjoy your time and visit my github. Temperature now is 21ºC; maximum today was 28ºC.'
+              'In the early morning and late afternoon is the best time to fish, cooler temperatures and lower light levels allow fish to swim in shallow water for meals.'
             }
           </Text>
+        </View>
+        <View style={styles.container}>
+          {forecastDetails.map((item4, index4) => (
+            <View
+              style={[
+                styles.details,
+                index4 === 3 ? {borderBottomWidth: 0} : null,
+              ]}
+              key={'subarray' + index4.toString()}>
+              {item4.map(i => (
+                <View style={{flex: 1, padding: 10}} key={i.title}>
+                  <Text style={[styles.textTempGray, {fontSize: 12}]}>
+                    {' '}
+                    {i.title}{' '}
+                  </Text>
+                  <Text style={[styles.text, {fontSize: 28}]}> {i.text} </Text>
+                </View>
+              ))}
+            </View>
+          ))}
         </View>
       </View>
     </ScrollView>
@@ -347,7 +369,33 @@ const WeatherForecast = props => {
   );
 };
 
-export default WeatherForecast;
+Weather.navigationOptions = navData => {
+  return {
+    headerTitle: 'Weather',
+    headerLeft: () => (
+      <HeaderButtons HeaderButtonComponent={HeaderButton}>
+        <Item
+          title="Menu"
+          iconName={Platform.OS === 'android' ? 'md-menu' : 'ios-menu'}
+          onPress={() => {
+            navData.navigation.toggleDrawer();
+          }}
+        />
+      </HeaderButtons>
+    ),
+    headerRight: () => (
+      <HeaderButtons HeaderButtonComponent={HeaderButton}>
+        <Item
+          title="Search"
+          iconName={Platform.OS === 'android' ? 'md-search' : 'ios-search'}
+          onPress={() => {
+            navData.navigation.toggleDrawer();
+          }}
+        />
+      </HeaderButtons>
+    ),
+  };
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -363,6 +411,7 @@ const styles = StyleSheet.create({
     height: 120,
   },
   center: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -373,12 +422,12 @@ const styles = StyleSheet.create({
   topBottomWhiteBorder: {
     borderBottomColor: '#fff',
     borderTopColor: '#fff',
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderTopWidth: 0.5,
+    borderBottomWidth: 0.5,
   },
   bottomWhiteBorder: {
     borderBottomColor: '#fff',
-    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomWidth: 0.5,
     paddingBottom: 10,
   },
   lineSpaced: {
@@ -434,7 +483,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginHorizontal: 15,
     borderBottomColor: '#fff',
-    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomWidth: 0.5,
   },
   //
   footer: {
@@ -459,3 +508,5 @@ const styles = StyleSheet.create({
     margin: 3,
   },
 });
+
+export default Weather;

@@ -46,11 +46,16 @@ const Home = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadRecords]);
 
-  useEffect(() => {
+  const loadData = () => {
     setIsLoading(true);
     loadRecords().then(() => {
       setIsLoading(false);
     });
+  };
+
+  useEffect(() => {
+    loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, loadRecords]);
 
   const selectItemHandler = (id, title) => {
@@ -66,7 +71,9 @@ const Home = props => {
         <Text>An error occurred!</Text>
         <Button
           title="Try again"
-          onPress={loadRecords}
+          onPress={() => {
+            loadData();
+          }}
           color={Colors.primary}
         />
       </View>

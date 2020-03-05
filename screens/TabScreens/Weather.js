@@ -117,13 +117,18 @@ const Weather = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadWeather, loadForecast]);
 
-  useEffect(() => {
+  const loadData = () => {
     setIsLoading(true);
     loadForecast().then(() => {
       loadWeather().then(() => {
         setIsLoading(false);
       });
     });
+  };
+
+  useEffect(() => {
+    loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, loadForecast, loadWeather]);
 
   if (error) {
@@ -132,7 +137,9 @@ const Weather = props => {
         <Text>An error occurred!</Text>
         <Button
           title="Try again"
-          onPress={(loadWeather, loadForecast)}
+          onPress={() => {
+            loadData();
+          }}
           color={Colors.primary}
         />
       </View>

@@ -11,14 +11,12 @@ export const fetchRecords = () => {
     const token = getState().auth.token;
     const userId = getState().auth.userId;
     try {
-      const response = await fetch(
-        `https://shopapp-d5c17.firebaseio.com/records.json?auth=${token}`,
-      );
+      const url = `https://shopapp-d5c17.firebaseio.com/records.json?auth=${token}`;
+      const response = await fetch(url);
 
       if (!response.ok) {
         throw new Error('Something went wrong!');
       }
-
       const resData = await response.json();
       const loadedRecords = [];
       for (const key in resData) {
@@ -56,6 +54,7 @@ export const fetchRecords = () => {
       });
     } catch (err) {
       // send to custom analytics server
+      console.log(err);
       throw err;
     }
   };

@@ -12,14 +12,17 @@ import {
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {HeaderButtons, Item} from 'react-navigation-header-buttons';
+import Geolocation from '@react-native-community/geolocation';
+import Modal from 'react-native-modal';
+import ModalFilterPicker from 'react-native-modal-filter-picker';
 
 import HeaderButton from '../../components/UI/HeaderButton';
-import Icon from 'react-native-vector-icons/Ionicons';
+// import Icon from 'react-native-vector-icons/Ionicons';
 import {Button} from 'react-native-elements';
 import Colors from '../../constants/Colors';
 import * as weatherActions from '../../store/actions/weather';
 
-const OWMIcon = require('../../assets/owm_icon.png');
+// const OWMIcon = require('../../assets/owm_icon.png');
 const weatherIcons = {
   '01d': require('../../assets/weather/01d.png'),
   '01n': require('../../assets/weather/01n.png'),
@@ -70,11 +73,71 @@ const Weather = props => {
   const forecastData = useSelector(state => state.weather.forecastData);
   const dispatch = useDispatch();
 
+  const [position, setPosition] = useState({
+    latitude: 0,
+    longitude: 0,
+  });
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [cityPicked, setCityPicked] = useState(null);
+
+  const onSelectModalPicker = picked => {
+    setCityPicked(picked);
+    setIsModalVisible(false);
+  };
+
+  const onCancelModalPicker = () => {
+    setIsModalVisible(false);
+  };
+
+  const options = [
+    {
+      key: 'Paphos',
+      label: 'Paphos',
+    },
+    {
+      key: 'Limassol',
+      label: 'Limassol',
+    },
+    {
+      key: 'Nicosia',
+      label: 'Nicosia',
+    },
+    {
+      key: 'Famagusta',
+      label: 'Famagusta',
+    },
+    {
+      key: 'Larnaca',
+      label: 'Larnaca',
+    },
+  ];
+
+  const toggleModal = useCallback(() => {
+    setIsModalVisible(!isModalVisible);
+  }, [isModalVisible]);
+
+  useEffect(() => {
+    props.navigation.setParams({searchModal: toggleModal});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [toggleModal]);
+
+  const getPosition = () => {
+    Geolocation.getCurrentPosition(pos => {
+      setPosition({
+        latitude: pos.coords.latitude,
+        longitude: pos.coords.longitude,
+      });
+    });
+  };
+
   const loadWeather = useCallback(async () => {
     setError(null);
     setIsRefreshing(true);
     try {
-      await dispatch(weatherActions.fetchWeatherData(146669));
+      await dispatch(
+        weatherActions.fetchWeatherData(position.latitude, position.longitude),
+      );
     } catch (err) {
       console.log(err.message);
       setError(err.message);
@@ -87,7 +150,9 @@ const Weather = props => {
     setError(null);
     setIsRefreshing(true);
     try {
-      await dispatch(weatherActions.fetchForecastData(146669));
+      await dispatch(
+        weatherActions.fetchForecastData(position.latitude, position.longitude),
+      );
     } catch (err) {
       console.log(err.message);
       setError(err.message);
@@ -106,6 +171,7 @@ const Weather = props => {
   };
 
   useEffect(() => {
+    getPosition();
     const willFocusSub = props.navigation.addListener(
       'willFocus',
       (loadWeather, loadForecast),
@@ -127,6 +193,7 @@ const Weather = props => {
   };
 
   useEffect(() => {
+    getPosition();
     loadData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, loadForecast, loadWeather]);
@@ -162,16 +229,6 @@ const Weather = props => {
     return aestTime;
   };
 
-  const generateBackgroundColor = () => {
-    function s(s) {
-      return Math.floor(Math.random() * s).toString();
-    }
-
-    return {
-      backgroundColor: 'hsl(' + s(240) + ', ' + s(100) + '%, ' + s(30) + '%)',
-    };
-  };
-
   const roundNumber = num => {
     if (num) {
       return Math.round(num);
@@ -182,8 +239,6 @@ const Weather = props => {
 
   let forecastDetails = [];
   if (!isEmpty(weatherData)) {
-    // console.log('for' + isEmpty(forecastData));
-    // console.log('we' + isEmpty(weatherData));
     if (weatherData.dt) {
       let sR = transformDate(weatherData.sys.sunrise);
       let sS = transformDate(weatherData.sys.sunset);
@@ -368,6 +423,18 @@ const Weather = props => {
           ))}
         </View>
       </View>
+      <View style={{flex: 1}}>
+        <ModalFilterPicker
+          visible={isModalVisible}
+          onSelect={onSelectModalPicker}
+          onCancel={onCancelModalPicker}
+          options={options}>
+          <ScrollView style={styles.modal}>
+            <Text>Hello!</Text>
+            <Button title="Hide modal" onPress={toggleModal} />
+          </ScrollView>
+        </ModalFilterPicker>
+      </View>
     </ScrollView>
 
     // <View>
@@ -377,6 +444,7 @@ const Weather = props => {
 };
 
 Weather.navigationOptions = navData => {
+  const searchModal = navData.navigation.getParam('searchModal');
   return {
     headerTitle: 'Weather',
     headerLeft: () => (
@@ -395,9 +463,7 @@ Weather.navigationOptions = navData => {
         <Item
           title="Search"
           iconName={Platform.OS === 'android' ? 'md-search' : 'ios-search'}
-          onPress={() => {
-            navData.navigation.toggleDrawer();
-          }}
+          onPress={searchModal}
         />
       </HeaderButtons>
     ),
@@ -416,6 +482,11 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     paddingVertical: 5,
     height: 120,
+  },
+  modal: {
+    flex: 1,
+    marginHorizontal: '10%',
+    backgroundColor: '#fff',
   },
   center: {
     flex: 1,

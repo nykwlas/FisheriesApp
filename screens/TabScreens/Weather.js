@@ -69,8 +69,8 @@ const Weather = props => {
   const [cityPicked, setCityPicked] = useState();
 
   const [position, setPosition] = useState({
-    latitude: 0,
-    longitude: 0,
+    latitude: 35.1264,
+    longitude: 33.4299,
   });
 
   const weatherData = useSelector(state => state.weather.weatherData);
@@ -151,7 +151,7 @@ const Weather = props => {
 
   const onSelectModalPicker = picked => {
     setCityPicked(picked.key);
-    loadData();
+    // loadData();
     setIsModalVisible(false);
   };
 
@@ -217,13 +217,13 @@ const Weather = props => {
       willFocusSub.remove();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loadWeather, loadForecast]);
+  }, [loadWeather, loadForecast, setCityPicked]);
 
   useEffect(() => {
     getPosition();
     loadData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, loadForecast, loadWeather]);
+  }, [dispatch, loadForecast, loadWeather, setCityPicked]);
 
   if (error) {
     return (

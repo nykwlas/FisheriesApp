@@ -36,7 +36,8 @@ const Input = props => {
       onInputChange(id, inputState.value, inputState.isValid);
       onInputChangeSet(inputState.value);
     }
-  }, [inputState, onInputChange, onInputChangeSet, id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inputState, onInputChange, id, onInputChangeSet]);
 
   const textChangeHandler = text => {
     const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -70,7 +71,10 @@ const Input = props => {
         {...props}
         style={styles.input}
         value={inputState.value}
-        onChangeText={textChangeHandler}
+        onChangeText={text => {
+          inputState.touched = true;
+          textChangeHandler(text);
+        }}
         onBlur={lostFocusHandler}
       />
       {!inputState.isValid && inputState.touched && (

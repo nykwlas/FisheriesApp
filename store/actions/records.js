@@ -19,8 +19,10 @@ export const fetchRecords = () => {
       }
       const resData = await response.json();
       const loadedRecords = [];
+      // eslint-disable-next-line no-unused-vars
       for (const key in resData) {
         const catches = [];
+        // eslint-disable-next-line no-unused-vars
         for (const key2 in resData[key].catches) {
           catches.push(
             new Catch(

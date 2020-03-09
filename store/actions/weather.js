@@ -5,7 +5,13 @@ export const FORECAST_FETCH = 'FORECAST_FETCH';
 export const fetchWeatherData = (lat, lon) => {
   return async (dispatch, getState) => {
     try {
-      const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&lang=en&units=metric&APPID=${secret_token}`;
+      let url;
+      if (lon === null) {
+        url = `https://api.openweathermap.org/data/2.5/weather?q=${lat}&lang=en&units=metric&APPID=${secret_token}`;
+      } else {
+        url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&lang=en&units=metric&APPID=${secret_token}`;
+      }
+      // console.log(url);
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error('Something went wrong!');
@@ -27,7 +33,13 @@ export const fetchForecastData = (lat, lon) => {
   return async (dispatch, getState) => {
     // const currentWeather = getState().weather.currentWeather;
     try {
-      const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&lang=en&units=metric&APPID=${secret_token}`;
+      let url;
+      if (lon === null) {
+        url = `https://api.openweathermap.org/data/2.5/forecast?q=${lat}&lang=en&units=metric&APPID=${secret_token}`;
+      } else {
+        url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&lang=en&units=metric&APPID=${secret_token}`;
+      }
+      // console.log(url);
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error('Something went wrong!');

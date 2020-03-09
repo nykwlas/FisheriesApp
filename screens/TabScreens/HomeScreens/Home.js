@@ -3,6 +3,7 @@ import {
   Platform,
   StyleSheet,
   Text,
+  Alert,
   View,
   FlatList,
   ActivityIndicator,
@@ -65,6 +66,19 @@ const Home = props => {
     });
   };
 
+  const deleteHandler = id => {
+    Alert.alert('Are you sure?', 'Do you really want to delete this record?', [
+      {text: 'No', style: 'default'},
+      {
+        text: 'Yes',
+        style: 'destructive',
+        onPress: () => {
+          dispatch(recordActions.deleteRecord(id));
+        },
+      },
+    ]);
+  };
+
   if (error) {
     return (
       <View style={styles.centered}>
@@ -116,13 +130,25 @@ const Home = props => {
             onSelect={() => {
               selectItemHandler(itemData.item.id, itemData.item.title);
             }}>
-            <Button
-              color={Colors.primary}
-              title="View Details"
-              onPress={() => {
-                selectItemHandler(itemData.item.id, itemData.item.title);
-              }}
-            />
+            <View style={styles.buttonContainer}>
+              <View style={styles.button}>
+                <Button
+                  color={Colors.primary}
+                  title="View Details"
+                  onPress={() => {
+                    selectItemHandler(itemData.item.id, itemData.item.title);
+                  }}
+                />
+              </View>
+              <View style={styles.button}>
+                <Button
+                  style={styles.button}
+                  color={Colors.primary}
+                  title="Delete"
+                  onPress={deleteHandler.bind(this, itemData.item.id)}
+                />
+              </View>
+            </View>
           </RecordItem>
         )}
       />
@@ -157,6 +183,16 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-between',
+  },
+  buttonContainer: {
+    flex: 1,
+    marginTop: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  button: {
+    width: '35%',
   },
   centered: {
     flex: 1,

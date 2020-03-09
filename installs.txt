@@ -20,7 +20,7 @@ npm install --save react-native-progress-steps
 npm install react-native-picker-select
 npm install --save @react-native-community/datetimepicker
 npm install --save react-native-modal
-npm install --save react-native-mod-filter-picker
+npm install --save react-native-modal-filter-picker
 npm install --save @react-native-community/geolocation
 
 NOT USED npm install --save firebase

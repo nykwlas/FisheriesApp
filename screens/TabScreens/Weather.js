@@ -13,16 +13,13 @@ import {
 import {useSelector, useDispatch} from 'react-redux';
 import {HeaderButtons, Item} from 'react-navigation-header-buttons';
 import Geolocation from '@react-native-community/geolocation';
-import Modal from 'react-native-modal';
 import ModalFilterPicker from 'react-native-modal-filter-picker';
 
 import HeaderButton from '../../components/UI/HeaderButton';
-// import Icon from 'react-native-vector-icons/Ionicons';
 import {Button} from 'react-native-elements';
 import Colors from '../../constants/Colors';
 import * as weatherActions from '../../store/actions/weather';
 
-// const OWMIcon = require('../../assets/owm_icon.png');
 const weatherIcons = {
   '01d': require('../../assets/weather/01d.png'),
   '01n': require('../../assets/weather/01n.png'),
@@ -67,49 +64,127 @@ function capitalizeFirstLetter(string) {
 
 const Weather = props => {
   const [isLoading, setIsLoading] = useState(false);
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState();
-  const weatherData = useSelector(state => state.weather.weatherData);
-  const forecastData = useSelector(state => state.weather.forecastData);
-  const dispatch = useDispatch();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [cityPicked, setCityPicked] = useState();
 
   const [position, setPosition] = useState({
     latitude: 0,
     longitude: 0,
   });
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [cityPicked, setCityPicked] = useState(null);
+  const weatherData = useSelector(state => state.weather.weatherData);
+  const forecastData = useSelector(state => state.weather.forecastData);
+  const dispatch = useDispatch();
 
-  const onSelectModalPicker = picked => {
-    setCityPicked(picked);
-    setIsModalVisible(false);
+  const isEmpty = obj => {
+    for (var key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        return false;
+      }
+    }
+    return true;
   };
 
-  const onCancelModalPicker = () => {
+  const loadWeather = useCallback(async () => {
+    setError(null);
+    try {
+      if (!isEmpty(cityPicked) && !(cityPicked === 'My Coordinates')) {
+        await dispatch(weatherActions.fetchWeatherData(cityPicked, null));
+      } else {
+        await dispatch(
+          weatherActions.fetchWeatherData(
+            position.latitude,
+            position.longitude,
+          ),
+        );
+      }
+    } catch (err) {
+      console.log(err.message);
+      setError(err.message);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    dispatch,
+    setIsLoading,
+    setError,
+    position.latitude,
+    position.longitude,
+    cityPicked,
+  ]);
+
+  const loadForecast = useCallback(async () => {
+    setError(null);
+    try {
+      if (!isEmpty(cityPicked) && !(cityPicked === 'My Coordinates')) {
+        await dispatch(weatherActions.fetchForecastData(cityPicked, null));
+      } else {
+        await dispatch(
+          weatherActions.fetchForecastData(
+            position.latitude,
+            position.longitude,
+          ),
+        );
+      }
+    } catch (err) {
+      console.log(err.message);
+      setError(err.message);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    dispatch,
+    setIsLoading,
+    setError,
+    position.latitude,
+    position.longitude,
+    cityPicked,
+  ]);
+
+  const loadData = () => {
+    setIsLoading(true);
+    loadForecast().then(() => {
+      loadWeather().then(() => {
+        setIsLoading(false);
+      });
+    });
+  };
+
+  const onSelectModalPicker = picked => {
+    setCityPicked(picked.key);
+    loadData();
     setIsModalVisible(false);
   };
 
   const options = [
     {
+      key: 'My Coordinates',
+      label: 'My Coordinates',
+      searchKey: 'coordinates',
+    },
+    {
       key: 'Paphos',
       label: 'Paphos',
+      searchKey: 'Cyprus',
     },
     {
       key: 'Limassol',
       label: 'Limassol',
+      searchKey: 'Cyprus',
     },
     {
       key: 'Nicosia',
       label: 'Nicosia',
+      searchKey: 'Cyprus',
     },
     {
       key: 'Famagusta',
       label: 'Famagusta',
+      searchKey: 'Cyprus',
     },
     {
       key: 'Larnaca',
       label: 'Larnaca',
+      searchKey: 'Cyprus',
     },
   ];
 
@@ -131,45 +206,6 @@ const Weather = props => {
     });
   };
 
-  const loadWeather = useCallback(async () => {
-    setError(null);
-    setIsRefreshing(true);
-    try {
-      await dispatch(
-        weatherActions.fetchWeatherData(position.latitude, position.longitude),
-      );
-    } catch (err) {
-      console.log(err.message);
-      setError(err.message);
-    }
-    setIsRefreshing(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, setIsLoading, setError]);
-
-  const loadForecast = useCallback(async () => {
-    setError(null);
-    setIsRefreshing(true);
-    try {
-      await dispatch(
-        weatherActions.fetchForecastData(position.latitude, position.longitude),
-      );
-    } catch (err) {
-      console.log(err.message);
-      setError(err.message);
-    }
-    setIsRefreshing(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, setIsLoading, setError]);
-
-  const isEmpty = obj => {
-    for (var key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        return false;
-      }
-    }
-    return true;
-  };
-
   useEffect(() => {
     getPosition();
     const willFocusSub = props.navigation.addListener(
@@ -182,15 +218,6 @@ const Weather = props => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadWeather, loadForecast]);
-
-  const loadData = () => {
-    setIsLoading(true);
-    loadForecast().then(() => {
-      loadWeather().then(() => {
-        setIsLoading(false);
-      });
-    });
-  };
 
   useEffect(() => {
     getPosition();
@@ -293,13 +320,13 @@ const Weather = props => {
   }
 
   return (
-    <ScrollView style={{backgroundColor: '#00028a'}}>
-      <View style={{flex: 1}}>
+    <ScrollView style={styles.backColor}>
+      <View style={styles.flex}>
         <View style={styles.centered}>
-          <Text style={[styles.text, {fontSize: 36}]}>
+          <Text style={[styles.text, styles.fontLarge]}>
             {forecastData.city.name}
           </Text>
-          <Text style={[styles.text, {fontSize: 18}]}>
+          <Text style={[styles.text, styles.fontSmall]}>
             {capitalizeFirstLetter(weatherData.weather[0].description)}
           </Text>
           <Text style={styles.textBigTemp}>
@@ -307,19 +334,15 @@ const Weather = props => {
           </Text>
         </View>
         <View style={[styles.lineSpaced]}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'flex-end',
-            }}>
-            <Text style={[styles.textDay, {fontWeight: '300'}]}>
+          <View style={styles.rowEnd}>
+            <Text style={[styles.textDay, styles.weightBig]}>
               {weatherData.dt && days[transformDate(weatherData.dt).getDay()]}
             </Text>
-            <Text style={[styles.textBoldWhite, {paddingLeft: 10}]}>
+            <Text style={[styles.textBoldWhite, styles.padLeft]}>
               {'TODAY'}
             </Text>
           </View>
-          <View style={{flexDirection: 'row'}}>
+          <View style={styles.flexDirRow}>
             <Text style={styles.textTempWhite}>
               {roundNumber(weatherData.main.temp_min)}
             </Text>
@@ -330,18 +353,16 @@ const Weather = props => {
         </View>
         <View style={[styles.flatlist, styles.topBottomWhiteBorder]}>
           <FlatList
-            // onRefresh={loadForecast}
-            // refreshing={isRefreshing}
             horizontal
             data={forecastData.list}
             keyExtractor={item => item.dt + item.dt.toLocaleString}
             renderItem={({item, index, separators}) => (
-              <View style={[styles.lineSpaced, {flexDirection: 'column'}]}>
+              <View style={[styles.lineSpaced, styles.flexDirCol]}>
                 <Text style={styles.text}>
                   {index === 0 ? 'Now' : transformDate(item.dt).getHours()}
                 </Text>
                 <Image
-                  style={{height: 24, width: 24, marginVertical: 20}}
+                  style={[styles.image, styles.margVertical]}
                   source={weatherIcons[item.weather[0].icon]}
                 />
                 <Text style={styles.textBoldWhite}>
@@ -353,34 +374,22 @@ const Weather = props => {
         </View>
         <View style={[styles.container, styles.bottomWhiteBorder]}>
           <FlatList
-            // onRefresh={loadForecast}
-            // refreshing={isRefreshing}
             data={forecastData.list}
             keyExtractor={item => item.dt_txt + item.dt_txt.toLocaleString} //style={[styles.lineSpaced, {paddingVertical: 5}]}
             renderItem={({item, index, separators}) => {
               if (transformDate(item.dt).getHours() === 14) {
                 return (
-                  <View style={[styles.lineSpaced, {paddingVertical: 5}]}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        flex: 1.4,
-                      }}>
+                  <View style={[styles.lineSpaced, styles.padVertical]}>
+                    <View style={styles.rowBetween}>
                       <Text style={styles.textDay}>
                         {days[transformDate(item.dt).getDay()]}
                       </Text>
                       <Image
-                        style={{height: 24, width: 24}}
+                        style={styles.image}
                         source={weatherIcons[item.weather[0].icon]}
                       />
                     </View>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'flex-end',
-                        flex: 1,
-                      }}>
+                    <View style={styles.rowEndJustify}>
                       <Text style={styles.textTempWhite}>
                         {roundNumber(item.main.temp_min)}
                       </Text>
@@ -405,41 +414,32 @@ const Weather = props => {
         <View style={styles.container}>
           {forecastDetails.map((item4, index4) => (
             <View
-              style={[
-                styles.details,
-                index4 === 3 ? {borderBottomWidth: 0} : null,
-              ]}
+              style={[styles.details, index4 === 3 ? styles.zeroBot : null]}
               key={'subarray' + index4.toString()}>
               {item4.map(i => (
-                <View style={{flex: 1, padding: 10}} key={i.title}>
-                  <Text style={[styles.textTempGray, {fontSize: 12}]}>
+                <View style={styles.detailTitle} key={i.title}>
+                  <Text style={[styles.textTempGray, styles.font2Small]}>
                     {' '}
                     {i.title}{' '}
                   </Text>
-                  <Text style={[styles.text, {fontSize: 28}]}> {i.text} </Text>
+                  <Text style={[styles.text, styles.fontMed]}> {i.text} </Text>
                 </View>
               ))}
             </View>
           ))}
         </View>
       </View>
-      <View style={{flex: 1}}>
+      <View style={styles.flex}>
         <ModalFilterPicker
+          title={'Select City'}
+          titleTextStyle={styles.modalTitle}
           visible={isModalVisible}
           onSelect={onSelectModalPicker}
-          onCancel={onCancelModalPicker}
-          options={options}>
-          <ScrollView style={styles.modal}>
-            <Text>Hello!</Text>
-            <Button title="Hide modal" onPress={toggleModal} />
-          </ScrollView>
-        </ModalFilterPicker>
+          onCancel={toggleModal}
+          options={options}
+        />
       </View>
     </ScrollView>
-
-    // <View>
-    //   <Text>AEL</Text>
-    // </View>
   );
 };
 
@@ -475,6 +475,33 @@ const styles = StyleSheet.create({
     flex: 1,
     width: screenWidth,
   },
+  flex: {flex: 1},
+  flexDirRow: {flexDirection: 'row'},
+  flexDirCol: {flexDirection: 'column'},
+  rowEnd: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+  },
+  rowEndJustify: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    flex: 1,
+  },
+  rowBetween: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    flex: 1.4,
+  },
+  backColor: {backgroundColor: '#00028a'},
+  font2Small: {fontSize: 12},
+  fontSmall: {fontSize: 18},
+  fontMed: {fontSize: 28},
+  fontLarge: {fontSize: 36},
+  weightBig: {fontWeight: '300'},
+  margVertical: {marginVertical: 20},
+  padVertical: {paddingVertical: 5},
+  padLeft: {paddingLeft: 10},
+  image: {height: 24, width: 24},
   flatlist: {
     flexDirection: 'column',
     alignItems: 'flex-start',
@@ -487,6 +514,12 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: '10%',
     backgroundColor: '#fff',
+  },
+  modalTitle: {
+    textAlign: 'center',
+    marginTop: 20,
+    fontSize: 28,
+    color: 'white',
   },
   center: {
     flex: 1,
@@ -508,6 +541,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     paddingBottom: 10,
   },
+  zeroBot: {borderBottomWidth: 0},
   lineSpaced: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -515,8 +549,6 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 10,
   },
-  //
-  //
   textReport: {
     color: '#fff',
     fontSize: 16,
@@ -547,14 +579,12 @@ const styles = StyleSheet.create({
   text: {
     color: '#fff',
   },
-  //
-  //
   report: {
     alignItems: 'center',
     justifyContent: 'center',
     padding: 15,
   },
-  //
+  detailTitle: {flex: 1, padding: 10},
   details: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -562,28 +592,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     borderBottomColor: '#fff',
     borderBottomWidth: 0.5,
-  },
-  //
-  footer: {
-    width: screenWidth,
-    height: 40,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 15,
-    borderTopColor: '#fff',
-    borderTopWidth: StyleSheet.hairlineWidth,
-  },
-  ballWraper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  ball: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    margin: 3,
   },
 });
 

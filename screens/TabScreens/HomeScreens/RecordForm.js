@@ -84,6 +84,7 @@ const formReducer = (state, action) => {
       [action.input]: action.isValid,
     };
     let updatedFormIsValid = true;
+    // eslint-disable-next-line no-unused-vars
     for (const key in updatedValidities) {
       updatedFormIsValid = updatedFormIsValid && updatedValidities[key];
     }
@@ -107,6 +108,14 @@ const RecordForm = props => {
   const [depthField, setDepthField] = useState('');
   const [methodField, setMethodField] = useState('');
   const [description, setDescription] = useState('');
+
+  const [date, setDate] = useState(new Date(1598051730000));
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const [stepOneError, setStepOneError] = useState(false);
+  const [stepTwoError, setStepTwoError] = useState(false);
 
   const placeholder = {
     label: 'Select a type...',
@@ -187,20 +196,8 @@ const RecordForm = props => {
     [dispatchFormState],
   );
 
-  const [date, setDate] = useState(new Date(1598051730000));
-  const [mode, setMode] = useState('date');
-  const [show, setShow] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
-  };
-
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setDate(currentDate);
-    setShow(Platform.OS === 'ios' ? true : false);
-    handleConfirmDate(currentDate);
   };
 
   const showMode = currentMode => {
@@ -212,9 +209,9 @@ const RecordForm = props => {
     showMode('date');
   };
 
-  const showTimepicker = () => {
-    showMode('time');
-  };
+  // const showTimepicker = () => {
+  //   showMode('time');
+  // };
 
   const handleConfirmDate = inputDate => {
     const dat = inputDate.getUTCDate();
@@ -222,6 +219,13 @@ const RecordForm = props => {
     const year = inputDate.getUTCFullYear();
     const dateStr = dat + '/' + month + '/' + year;
     inputChangeHandler('date', dateStr, true);
+  };
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setDate(currentDate);
+    setShow(Platform.OS === 'ios' ? true : false);
+    handleConfirmDate(currentDate);
   };
 
   const pickerStyle = {
@@ -241,8 +245,6 @@ const RecordForm = props => {
     toggleModal();
   };
 
-  const [stepOneError, setStepOneError] = useState(false);
-
   const onNextStepOne = () => {
     if (!formState.inputValues.title || !formState.inputValues.date) {
       setStepOneError(true);
@@ -250,8 +252,6 @@ const RecordForm = props => {
       setStepOneError(false);
     }
   };
-
-  const [stepTwoError, setStepTwoError] = useState(false);
 
   const onNextStepTwo = () => {
     if (formState.inputValues.catches.length === 0) {
@@ -437,7 +437,7 @@ const RecordForm = props => {
                           errorValue={touched.time && errors.time}
                         />
                         <View style={styles.textContainer}>
-                          <Text style={styles.text}>Depth of Catch</Text>
+                          <Text style={styles.text}>Depth of Catch (m)</Text>
                         </View>
                         <View style={styles.inputModal}>
                           <FormInput
@@ -501,7 +501,7 @@ const RecordForm = props => {
             style={styles.description}
             id="description"
             label="Description"
-            errorText="Please enter a valid description!"
+            errorText="Please enter at least 5 characters!"
             keyboardType="default"
             returnKeyType="done"
             autoCapitalize="sentences"
@@ -542,6 +542,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   buttonContainer: {
     marginTop: 10,
     marginHorizontal: 25,
@@ -551,7 +556,7 @@ const styles = StyleSheet.create({
   },
   description: {
     marginLeft: '20%',
-    width: 200,
+    width: 250,
     maxWidth: 250,
   },
   inputDate: {

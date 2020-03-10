@@ -89,7 +89,7 @@ const Weather = props => {
   const loadWeather = useCallback(async () => {
     setError(null);
     try {
-      if (!isEmpty(cityPicked) && !(cityPicked === 'My Coordinates')) {
+      if (!isEmpty(cityPicked) && !(cityPicked === 'My Location')) {
         await dispatch(weatherActions.fetchWeatherData(cityPicked, null));
       } else {
         await dispatch(
@@ -116,7 +116,7 @@ const Weather = props => {
   const loadForecast = useCallback(async () => {
     setError(null);
     try {
-      if (!isEmpty(cityPicked) && !(cityPicked === 'My Coordinates')) {
+      if (!isEmpty(cityPicked) && !(cityPicked === 'My Location')) {
         await dispatch(weatherActions.fetchForecastData(cityPicked, null));
       } else {
         await dispatch(
@@ -157,9 +157,9 @@ const Weather = props => {
 
   const options = [
     {
-      key: 'My Coordinates',
-      label: 'My Coordinates',
-      searchKey: 'coordinates',
+      key: 'My Location',
+      label: 'My Location',
+      searchKey: 'Location',
     },
     {
       key: 'Paphos',

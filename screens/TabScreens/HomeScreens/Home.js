@@ -23,7 +23,7 @@ const Home = props => {
   const [isLoading, setIsLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState();
-  const records = useSelector(state => state.records.availableRecords);
+  const records = useSelector(state => state.records.userRecords);
   const dispatch = useDispatch();
 
   const loadRecords = useCallback(async () => {

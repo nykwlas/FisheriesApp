@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text, Platform} from 'react-native';
 
-import Profile from '../../screens/TabScreens/Profile';
+import Profile from '../../screens/TabScreens/ProfileScreens/Profile';
 import Library from '../../screens/TabScreens/Library';
 import Weather from '../../screens/TabScreens/Weather';
 import Scores from '../../screens/TabScreens/Scores';

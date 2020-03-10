@@ -8,9 +8,9 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 
-import FormInput from '../../components/FormInput';
-import FormButton from '../../components/FormButton';
-import ErrorMessage from '../../components/ErrorMessage';
+import FormInput from '../../components/Input/FormInput';
+import FormButton from '../../components/Buttons/FormButton';
+import ErrorMessage from '../../components/Input/ErrorMessage';
 import * as authActions from '../../store/actions/auth';
 
 const validationSchema = Yup.object().shape({

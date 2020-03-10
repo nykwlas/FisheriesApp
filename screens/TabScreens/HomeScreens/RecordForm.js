@@ -25,12 +25,12 @@ import {ProgressSteps, ProgressStep} from 'react-native-progress-steps';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RNPickerSelect from 'react-native-picker-select';
 
-import Input from '../../../components/UI/Input';
-import HeaderButton from '../../../components/UI/HeaderButton';
-import FormRecordButton from '../../../components/UI/FormRecordButton';
-import FormInput from '../../../components/FormInput';
-import FormButton from '../../../components/FormButton';
-import ErrorMessage from '../../../components/ErrorMessage';
+import Input from '../../../components/Input/Input';
+import HeaderButton from '../../../components/Buttons/HeaderButton';
+import FormRecordButton from '../../../components/Buttons/FormRecordButton';
+import FormInput from '../../../components/Input/FormInput';
+import FormButton from '../../../components/Buttons/FormButton';
+import ErrorMessage from '../../../components/Input/ErrorMessage';
 import Catch from '../../../models/catch';
 
 import * as recordActions from '../../../store/actions/records';

@@ -13,8 +13,8 @@ import {useSelector, useDispatch} from 'react-redux';
 import {Button} from 'react-native-elements';
 import {HeaderButtons, Item} from 'react-navigation-header-buttons';
 
-import HeaderButton from '../../../components/UI/HeaderButton';
-import RecordButton from '../../../components/UI/RecordButton';
+import HeaderButton from '../../../components/Buttons/HeaderButton';
+import RecordButton from '../../../components/Buttons/RecordButton';
 import RecordItem from '../../../components/Records/RecordItem';
 import * as recordActions from '../../../store/actions/records';
 import Colors from '../../../constants/Colors';

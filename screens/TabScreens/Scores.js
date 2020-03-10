@@ -3,7 +3,7 @@ import {Platform, StyleSheet, Text, View} from 'react-native';
 
 import {HeaderButtons, Item} from 'react-navigation-header-buttons';
 
-import HeaderButton from '../../components/UI/HeaderButton';
+import HeaderButton from '../../components/Buttons/HeaderButton';
 
 const Score = props => {
   return (

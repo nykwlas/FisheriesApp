@@ -15,7 +15,7 @@ import {HeaderButtons, Item} from 'react-navigation-header-buttons';
 import Geolocation from '@react-native-community/geolocation';
 import ModalFilterPicker from 'react-native-modal-filter-picker';
 
-import HeaderButton from '../../components/UI/HeaderButton';
+import HeaderButton from '../../components/Buttons/HeaderButton';
 import {Button} from 'react-native-elements';
 import Colors from '../../constants/Colors';
 import * as weatherActions from '../../store/actions/weather';

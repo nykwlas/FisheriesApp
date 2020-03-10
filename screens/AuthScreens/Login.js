@@ -49,6 +49,7 @@ const Login = props => {
     const action = authActions.login(email, password);
     try {
       await dispatch(action);
+      await dispatch(authActions.getProfile());
       props.navigation.navigate('App');
     } catch (error) {
       actions.setFieldError('general', error.message);

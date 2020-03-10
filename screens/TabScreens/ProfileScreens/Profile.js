@@ -7,6 +7,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import {useSelector} from 'react-redux';
 import {Avatar, ListItem} from 'react-native-elements';
 import {HeaderButtons, Item} from 'react-navigation-header-buttons';
 
@@ -14,9 +15,11 @@ import HeaderButton from '../../../components/Buttons/HeaderButton';
 import BaseIcon from '../../../components/UI/Icon';
 import Chevron from '../../../components/UI/Chevron';
 import InfoText from '../../../components/UI/InfoText';
+import Colors from '../../../constants/Colors';
 
 const Profile = props => {
   const [pushNotifications, setPushNotifications] = useState(true);
+  const displayName = useSelector(state => state.auth.displayName);
 
   const onPressOptions = () => {
     // props.navigation.navigate('options');
@@ -37,7 +40,7 @@ const Profile = props => {
           />
         </View>
         <View>
-          <Text style={{fontSize: 16}}>NAME</Text>
+          <Text style={{fontSize: 16}}>{displayName}</Text>
           <Text
             style={{
               color: 'gray',
@@ -72,9 +75,25 @@ const Profile = props => {
           }
         />
         <ListItem
-          // chevron
-          title="Currency"
-          rightTitle="USD"
+          title="Statistics"
+          rightTitle="Charts"
+          rightTitleStyle={{fontSize: 15}}
+          onPress={() => onPressOptions()}
+          containerStyle={styles.listItemContainer}
+          leftIcon={
+            <BaseIcon
+              containerStyle={{backgroundColor: '#57DCE7'}}
+              icon={{
+                type: 'material-community',
+                name: 'chart-bar',
+              }}
+            />
+          }
+          rightIcon={<Chevron />}
+        />
+        <ListItem
+          title="Licences"
+          rightTitle="DFMR"
           rightTitleStyle={{fontSize: 15}}
           onPress={() => onPressOptions()}
           containerStyle={styles.listItemContainer}
@@ -245,7 +264,7 @@ const styles = StyleSheet.create({
     color: '#F57C00',
   },
   scroll: {
-    backgroundColor: 'white',
+    backgroundColor: Colors.background,
   },
   userRow: {
     alignItems: 'center',

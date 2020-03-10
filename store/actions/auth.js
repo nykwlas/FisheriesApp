@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage';
 export const AUTHENTICATE = 'AUTHENTICATE';
+export const PROFILE = 'PROFILE';
 export const LOGOUT = 'LOGOUT';
 
 let timer;
@@ -31,7 +32,7 @@ export const signup = (email, password) => {
     if (!response.ok) {
       const errorResData = await response.json();
       const errorId = errorResData.error.message;
-      let message = 'Something went wrong!';
+      let message = 'Something went wrong with signup!';
       if (errorId === 'EMAIL_EXISTS') {
         message = 'This email exists already!';
       } else if (errorId === 'INVALID_EMAIL') {
@@ -52,6 +53,66 @@ export const signup = (email, password) => {
       new Date().getTime() + parseInt(resData.expiresIn, 10) * 1000,
     );
     saveDataToStorage(resData.idToken, resData.localId, expirationDate);
+  };
+};
+
+export const updateProfile = name => {
+  return async dispatch => {
+    const userData = await AsyncStorage.getItem('userData');
+    const transformedData = JSON.parse(userData);
+    const {token} = transformedData;
+    const response = await fetch(
+      'https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyBEbKwUIcUAjhIDaOQzxX5Tqm_jTGI7FJY',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          idToken: token,
+          displayName: name,
+          photoUrl: 'url',
+          returnSecureToken: false,
+        }),
+      },
+    );
+
+    if (!response.ok) {
+      let message = 'Something went wrong storing user data!';
+      throw new Error(message);
+    }
+
+    // const resData = await response.json();
+    // console.log(resData);
+  };
+};
+
+export const getProfile = () => {
+  return async dispatch => {
+    const userData = await AsyncStorage.getItem('userData');
+    const transformedData = JSON.parse(userData);
+    const {token} = transformedData;
+    const response = await fetch(
+      'https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyBEbKwUIcUAjhIDaOQzxX5Tqm_jTGI7FJY',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          idToken: token,
+        }),
+      },
+    );
+
+    if (!response.ok) {
+      let message = 'Something went wrong with user data!';
+      throw new Error(message);
+    }
+
+    const resData = await response.json();
+    // console.log(resData);
+    dispatch({type: PROFILE, displayName: resData.users[0].displayName});
   };
 };
 

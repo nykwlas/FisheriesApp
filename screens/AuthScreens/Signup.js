@@ -12,6 +12,7 @@ import FormInput from '../../components/Input/FormInput';
 import FormButton from '../../components/Buttons/FormButton';
 import ErrorMessage from '../../components/Input/ErrorMessage';
 import * as authActions from '../../store/actions/auth';
+import Colors from '../../constants/Colors';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string()
@@ -65,10 +66,18 @@ const Signup = props => {
   };
 
   const handleOnSignup = async (values, actions) => {
-    const {email, password} = values;
+    const {email, password, name} = values;
     const action = authActions.signup(email, password);
     try {
-      await dispatch(action);
+      await dispatch(action).then(async () => {
+        try {
+          await dispatch(authActions.updateProfile(name));
+          await dispatch(authActions.getProfile());
+        } catch (error) {
+          console.log(error);
+          actions.setFieldError('general', error.message);
+        }
+      });
       props.navigation.navigate('App');
     } catch (error) {
       actions.setFieldError('general', error.message);
@@ -206,7 +215,7 @@ const Signup = props => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    // backgroundColor: '#fff',
   },
   logoContainer: {
     marginBottom: 15,
@@ -216,8 +225,8 @@ const styles = StyleSheet.create({
     margin: 25,
   },
   checkBoxContainer: {
-    backgroundColor: '#fff',
-    borderColor: '#fff',
+    backgroundColor: Colors.background,
+    borderColor: Colors.background,
   },
   loginTitle: {
     color: '#039BE5',

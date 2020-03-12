@@ -4,7 +4,7 @@ import {Icon} from 'react-native-elements';
 
 const BaseIcon = ({containerStyle, icon}) => (
   <View style={[styles.container, containerStyle]}>
-    <Icon size={24} color="white" type="material" {...icon} />
+    <Icon size={24} color="white" {...icon} />
   </View>
 );
 

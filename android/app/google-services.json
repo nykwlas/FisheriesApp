@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "412918219345",
+    "firebase_url": "https://shopapp-d5c17.firebaseio.com",
+    "project_id": "shopapp-d5c17",
+    "storage_bucket": "shopapp-d5c17.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:412918219345:android:9da94d76ac14154e8a6e70",
+        "android_client_info": {
+          "package_name": "com.fisheriesapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "412918219345-2h7klcvs3vbrde8c3hgkdc3js6it6m64.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfJ1BMMW1W4d0QiAsvNE6JRkDr0yux1n8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "412918219345-2h7klcvs3vbrde8c3hgkdc3js6it6m64.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

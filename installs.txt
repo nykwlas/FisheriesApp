@@ -22,6 +22,10 @@ npm install --save @react-native-community/datetimepicker
 npm install --save react-native-modal
 npm install --save react-native-modal-filter-picker
 npm install --save @react-native-community/geolocation
+npm install --save firebase
+npm install --save react-native-image-picker
+npm install --save react-native-dialog
+
 
 NOT USED npm install --save firebase
 	 npm install --save hoist-non-react-statics

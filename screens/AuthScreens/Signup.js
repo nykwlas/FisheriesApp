@@ -13,6 +13,9 @@ import FormButton from '../../components/Buttons/FormButton';
 import ErrorMessage from '../../components/Input/ErrorMessage';
 import * as authActions from '../../store/actions/auth';
 import Colors from '../../constants/Colors';
+// import firebaseConfig from '../../config/Firebase/firebaseConfig';
+// import * as firebase from 'firebase/app';
+// import 'firebase/storage';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string()
@@ -71,13 +74,14 @@ const Signup = props => {
     try {
       await dispatch(action).then(async () => {
         try {
-          await dispatch(authActions.updateProfile(name));
+          await dispatch(authActions.updateProfileName(name));
           await dispatch(authActions.getProfile());
         } catch (error) {
           console.log(error);
           actions.setFieldError('general', error.message);
         }
       });
+      // firebase.initializeApp(firebaseConfig);
       props.navigation.navigate('App');
     } catch (error) {
       actions.setFieldError('general', error.message);

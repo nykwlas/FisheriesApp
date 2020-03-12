@@ -14,6 +14,9 @@ import FormButton from '../../components/Buttons/FormButton';
 import ErrorMessage from '../../components/Input/ErrorMessage';
 import AppLogo from '../../components/AppLogo';
 import * as authActions from '../../store/actions/auth';
+// import firebaseConfig from '../../config/Firebase/firebaseConfig';
+// import * as firebase from 'firebase/app';
+// import 'firebase/storage';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -50,6 +53,7 @@ const Login = props => {
     try {
       await dispatch(action);
       await dispatch(authActions.getProfile());
+      // firebase.initializeApp(firebaseConfig);
       props.navigation.navigate('App');
     } catch (error) {
       actions.setFieldError('general', error.message);

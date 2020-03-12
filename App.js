@@ -12,6 +12,9 @@ import NavigationContainer from './navigation/NavigationContainer';
 import authReducer from './store/reducers/auth';
 import recordsReducer from './store/reducers/records';
 import weatherReducer from './store/reducers/weather';
+import firebaseConfig from './config/Firebase/firebaseConfig';
+import * as firebase from 'firebase/app';
+import 'firebase/storage';
 
 const rootReducer = combineReducers({
   records: recordsReducer,
@@ -45,6 +48,7 @@ export default function App() {
   };
 
   useEffect(() => {
+    firebase.initializeApp(firebaseConfig);
     init().finally(() => {
       RNBootSplash.hide({duration: 250});
     });
@@ -52,9 +56,7 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      {/* <PersistGate loading={null} persistor={persistor}> */}
       <NavigationContainer />
-      {/* </PersistGate> */}
     </Provider>
   );
 }

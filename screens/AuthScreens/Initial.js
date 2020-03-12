@@ -6,6 +6,9 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 import Colors from '../../constants/Colors';
 import * as authActions from '../../store/actions/auth';
+// import firebaseConfig from '../../config/Firebase/firebaseConfig';
+// import * as firebase from 'firebase/app';
+// import 'firebase/storage';
 
 const Initial = props => {
   const dispatch = useDispatch();
@@ -27,8 +30,10 @@ const Initial = props => {
       }
 
       const expirationTime = expirationDate.getTime() - new Date().getTime();
+      // firebase.initializeApp(firebaseConfig);
       props.navigation.navigate('App');
       dispatch(authActions.authenticate(userId, token, expirationTime));
+      await dispatch(authActions.getProfile());
     };
 
     tryLogin();

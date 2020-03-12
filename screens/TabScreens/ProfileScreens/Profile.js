@@ -7,22 +7,108 @@ import {
   Text,
   View,
 } from 'react-native';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import {Avatar, ListItem} from 'react-native-elements';
 import {HeaderButtons, Item} from 'react-navigation-header-buttons';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import HeaderButton from '../../../components/Buttons/HeaderButton';
 import BaseIcon from '../../../components/UI/Icon';
 import Chevron from '../../../components/UI/Chevron';
 import InfoText from '../../../components/UI/InfoText';
 import Colors from '../../../constants/Colors';
+import * as authActions from '../../../store/actions/auth';
+
+import ImagePicker from 'react-native-image-picker';
+import Dialog from 'react-native-dialog';
 
 const Profile = props => {
   const [pushNotifications, setPushNotifications] = useState(true);
-  const displayName = useSelector(state => state.auth.displayName);
+  const [isDialogVisible, setIsDialogVisible] = useState(false);
+  const [
+    isResetPasswordDialogVisible,
+    setIsResetPasswordDialogVisible,
+  ] = useState(false);
+  const [
+    isDeleteAccoubtDialogVisible,
+    setIsDeleteAccoubtDialogVisible,
+  ] = useState(false);
+
+  const [newDate, setNewDate] = useState(new Date());
+  const [displayName, setDisplayName] = useState(
+    useSelector(state => state.auth.displayName),
+  );
+  const [sumbitNameButton, setSumbitNameButton] = useState(true);
+  const [changedName, setChangedName] = useState();
+  const photoUrl = useSelector(state => state.auth.photoUrl);
+  const email = useSelector(state => state.auth.email);
+  const dispatch = useDispatch();
 
   const onPressOptions = () => {
     // props.navigation.navigate('options');
+  };
+
+  const options = {
+    title: 'Select Profile picture',
+    storageOptions: {
+      skipBackup: true,
+      // path: 'images',
+    },
+  };
+
+  const onPressChangePicture = async () => {
+    const userData = await AsyncStorage.getItem('userData');
+    const transformedData = JSON.parse(userData);
+    const {userId} = transformedData;
+    const url =
+      'https://firebasestorage.googleapis.com/v0/b/shopapp-d5c17.appspot.com/o/ProfileImages%2F' +
+      userId +
+      '.jpg?alt=media';
+    ImagePicker.showImagePicker(options, response => {
+      // console.log('Response = ', response);
+      if (response.didCancel) {
+        // console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else {
+        const source = response.uri;
+        dispatch(authActions.handleUpload(source)).then(() => {
+          setNewDate(new Date());
+        });
+      }
+    });
+    if (photoUrl === undefined) {
+      await dispatch(authActions.updatePhotoUrl(url));
+      await dispatch(authActions.getProfile());
+    }
+  };
+
+  const changeName = async () => {
+    setDisplayName(changedName);
+    await dispatch(authActions.updateProfileName(changedName));
+    await dispatch(authActions.getProfile());
+  };
+
+  const onPressChangeName = () => {
+    setIsDialogVisible(true);
+  };
+
+  const passwordReset = async () => {
+    await dispatch(authActions.resetPassword(email));
+    props.navigation.navigate('Auth');
+  };
+
+  const onPressPasswordReset = () => {
+    setIsResetPasswordDialogVisible(true);
+  };
+
+  const deleteAccount = async () => {
+    await dispatch(authActions.deleteAccount(email));
+    props.navigation.navigate('Auth');
+  };
+
+  const onPressDeleteAccount = () => {
+    setIsDeleteAccoubtDialogVisible(true);
   };
 
   const onChangePushNotifications = () => {
@@ -36,7 +122,7 @@ const Profile = props => {
           <Avatar
             rounded
             size="large"
-            source={require('../../../assets/owm_icon.png')}
+            source={{uri: photoUrl + '&' + newDate}}
           />
         </View>
         <View>
@@ -46,7 +132,7 @@ const Profile = props => {
               color: 'gray',
               fontSize: 16,
             }}>
-            EMAIL
+            {email}
           </Text>
         </View>
       </View>
@@ -108,35 +194,73 @@ const Profile = props => {
           }
           rightIcon={<Chevron />}
         />
+      </View>
+      <InfoText text="Account Settings" />
+      <View>
         <ListItem
-          title="Location"
-          rightTitle="New York"
-          rightTitleStyle={{fontSize: 15}}
-          onPress={() => onPressOptions()}
+          hideChevron
+          title="Change Profile Picture"
+          onPress={() => onPressChangePicture()}
           containerStyle={styles.listItemContainer}
           leftIcon={
             <BaseIcon
-              containerStyle={{backgroundColor: '#57DCE7'}}
+              containerStyle={{
+                backgroundColor: '#f5aa42',
+              }}
               icon={{
-                type: 'material',
-                name: 'place',
+                type: 'font-awesome',
+                name: 'user-circle',
               }}
             />
           }
           rightIcon={<Chevron />}
         />
         <ListItem
-          title="Language"
-          rightTitle="English"
+          title="Change Display Name"
+          rightTitle=""
           rightTitleStyle={{fontSize: 15}}
-          onPress={() => onPressOptions()}
+          onPress={onPressChangeName}
           containerStyle={styles.listItemContainer}
           leftIcon={
             <BaseIcon
-              containerStyle={{backgroundColor: '#FEA8A1'}}
+              containerStyle={{backgroundColor: '#4278f5'}}
               icon={{
-                type: 'material',
-                name: 'language',
+                type: 'material-community',
+                name: 'text-short',
+              }}
+            />
+          }
+          rightIcon={<Chevron />}
+        />
+        <ListItem
+          title="Password Reset"
+          rightTitle=""
+          rightTitleStyle={{fontSize: 15}}
+          onPress={() => onPressPasswordReset()}
+          containerStyle={styles.listItemContainer}
+          leftIcon={
+            <BaseIcon
+              containerStyle={{backgroundColor: '#f56342'}}
+              icon={{
+                type: 'font-awesome',
+                name: 'lock',
+              }}
+            />
+          }
+          rightIcon={<Chevron />}
+        />
+        <ListItem
+          title="Delete Account"
+          rightTitle=""
+          rightTitleStyle={{fontSize: 15}}
+          onPress={() => onPressDeleteAccount()}
+          containerStyle={styles.listItemContainer}
+          leftIcon={
+            <BaseIcon
+              containerStyle={{backgroundColor: '#2e362e'}}
+              icon={{
+                type: 'MaterialCommunityIcons',
+                name: 'delete-forever',
               }}
             />
           }
@@ -232,6 +356,92 @@ const Profile = props => {
           rightIcon={<Chevron />}
         />
       </View>
+      <Dialog.Container
+        visible={isDialogVisible}
+        onBackdropPress={() => {
+          setIsDialogVisible(false);
+        }}>
+        <Dialog.Title style={styles.title}>
+          Change your Display Name
+        </Dialog.Title>
+        <Dialog.Description>Enter your full name.</Dialog.Description>
+        <Dialog.Input
+          wrapperStyle={styles.modalInput}
+          onChangeText={text => {
+            setChangedName(text);
+            if (text.length > 3) {
+              setSumbitNameButton(false);
+            } else {
+              setSumbitNameButton(true);
+            }
+          }}
+        />
+        {sumbitNameButton && (
+          <Dialog.Input style={styles.error}>
+            Your name must be more than 3 characters.
+          </Dialog.Input>
+        )}
+        <Dialog.Button
+          label="Cancel"
+          onPress={() => {
+            setIsDialogVisible(false);
+          }}
+        />
+        <Dialog.Button
+          label="Submit"
+          disabled={sumbitNameButton}
+          onPress={() => {
+            setIsDialogVisible(false);
+            changeName();
+          }}
+        />
+      </Dialog.Container>
+      <Dialog.Container
+        visible={isResetPasswordDialogVisible}
+        onBackdropPress={() => {
+          setIsResetPasswordDialogVisible(false);
+        }}>
+        <Dialog.Title style={styles.title}>
+          Send password reset email
+        </Dialog.Title>
+        <Dialog.Description>Accept to send you email.</Dialog.Description>
+        <Dialog.Button
+          label="Cancel"
+          onPress={() => {
+            setIsResetPasswordDialogVisible(false);
+          }}
+        />
+        <Dialog.Button
+          label="Send"
+          onPress={() => {
+            setIsResetPasswordDialogVisible(false);
+            passwordReset();
+          }}
+        />
+      </Dialog.Container>
+      <Dialog.Container
+        visible={isDeleteAccoubtDialogVisible}
+        onBackdropPress={() => {
+          setIsDeleteAccoubtDialogVisible(false);
+        }}>
+        <Dialog.Title style={styles.title}>
+          Are you sure you want to delete your account?
+        </Dialog.Title>
+        <Dialog.Description>Accept to delete your account.</Dialog.Description>
+        <Dialog.Button
+          label="Cancel"
+          onPress={() => {
+            setIsDeleteAccoubtDialogVisible(false);
+          }}
+        />
+        <Dialog.Button
+          label="Send"
+          onPress={() => {
+            setIsDeleteAccoubtDialogVisible(false);
+            deleteAccount();
+          }}
+        />
+      </Dialog.Container>
     </ScrollView>
   );
 };
@@ -281,6 +491,17 @@ const styles = StyleSheet.create({
     height: 55,
     borderWidth: 0.5,
     borderColor: '#ECECEC',
+  },
+  modalInput: {
+    borderBottomWidth: 0.5,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  error: {
+    fontSize: 16,
+    color: 'red',
   },
 });
 

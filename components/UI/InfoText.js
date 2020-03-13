@@ -1,5 +1,6 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import Colors from '../../constants/Colors';
 
 const InfoText = ({text}) => (
   <View style={styles.container}>
@@ -11,7 +12,7 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 20,
     paddingBottom: 12,
-    backgroundColor: '#F4F5F4',
+    backgroundColor: Colors.background,
   },
   infoText: {
     fontSize: 16,

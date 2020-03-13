@@ -482,6 +482,7 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingRight: 15,
     paddingTop: 6,
+    backgroundColor: Colors.background,
   },
   userImage: {
     marginRight: 12,

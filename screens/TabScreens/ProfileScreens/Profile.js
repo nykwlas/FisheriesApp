@@ -96,6 +96,7 @@ const Profile = props => {
   const passwordReset = async () => {
     await dispatch(authActions.resetPassword(email));
     props.navigation.navigate('Auth');
+    dispatch(authActions.logout());
   };
 
   const onPressPasswordReset = () => {
@@ -105,6 +106,7 @@ const Profile = props => {
   const deleteAccount = async () => {
     await dispatch(authActions.deleteAccount(email));
     props.navigation.navigate('Auth');
+    dispatch(authActions.logout());
   };
 
   const onPressDeleteAccount = () => {
@@ -435,7 +437,7 @@ const Profile = props => {
           }}
         />
         <Dialog.Button
-          label="Send"
+          label="Delete"
           onPress={() => {
             setIsDeleteAccoubtDialogVisible(false);
             deleteAccount();

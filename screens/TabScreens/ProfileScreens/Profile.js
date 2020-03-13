@@ -38,17 +38,13 @@ const Profile = props => {
   const [displayName, setDisplayName] = useState(
     useSelector(state => state.auth.displayName),
   );
-  const [sumbitNameButton, setSumbitNameButton] = useState(true);
   const [changedName, setChangedName] = useState();
+
   const photoUrl = useSelector(state => state.auth.photoUrl);
   const email = useSelector(state => state.auth.email);
   const dispatch = useDispatch();
 
-  const onPressOptions = () => {
-    // props.navigation.navigate('options');
-  };
-
-  const options = {
+  const imageOptions = {
     title: 'Select Profile picture',
     storageOptions: {
       skipBackup: true,
@@ -64,7 +60,7 @@ const Profile = props => {
       'https://firebasestorage.googleapis.com/v0/b/shopapp-d5c17.appspot.com/o/ProfileImages%2F' +
       userId +
       '.jpg?alt=media';
-    ImagePicker.showImagePicker(options, response => {
+    ImagePicker.showImagePicker(imageOptions, response => {
       // console.log('Response = ', response);
       if (response.didCancel) {
         // console.log('User cancelled image picker');
@@ -117,6 +113,18 @@ const Profile = props => {
     setPushNotifications(!pushNotifications);
   };
 
+  const onPressStatistics = () => {
+    props.navigation.navigate('Statistics');
+  };
+
+  const onPressLicences = () => {
+    props.navigation.navigate('Licences');
+  };
+
+  const onPressOptions = () => {
+    // props.navigation.navigate('options');
+  };
+
   return (
     <ScrollView style={styles.scroll}>
       <View style={styles.userRow}>
@@ -166,7 +174,7 @@ const Profile = props => {
           title="Statistics"
           rightTitle="Charts"
           rightTitleStyle={{fontSize: 15}}
-          onPress={() => onPressOptions()}
+          onPress={() => onPressStatistics()}
           containerStyle={styles.listItemContainer}
           leftIcon={
             <BaseIcon
@@ -183,7 +191,7 @@ const Profile = props => {
           title="Licences"
           rightTitle="DFMR"
           rightTitleStyle={{fontSize: 15}}
-          onPress={() => onPressOptions()}
+          onPress={() => onPressLicences()}
           containerStyle={styles.listItemContainer}
           leftIcon={
             <BaseIcon
@@ -371,18 +379,8 @@ const Profile = props => {
           wrapperStyle={styles.modalInput}
           onChangeText={text => {
             setChangedName(text);
-            if (text.length > 3) {
-              setSumbitNameButton(false);
-            } else {
-              setSumbitNameButton(true);
-            }
           }}
         />
-        {sumbitNameButton && (
-          <Dialog.Input style={styles.error}>
-            Your name must be more than 3 characters.
-          </Dialog.Input>
-        )}
         <Dialog.Button
           label="Cancel"
           onPress={() => {
@@ -391,7 +389,6 @@ const Profile = props => {
         />
         <Dialog.Button
           label="Submit"
-          disabled={sumbitNameButton}
           onPress={() => {
             setIsDialogVisible(false);
             changeName();

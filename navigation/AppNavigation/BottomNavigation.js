@@ -2,6 +2,8 @@ import React from 'react';
 import {Text, Platform} from 'react-native';
 
 import Profile from '../../screens/TabScreens/ProfileScreens/Profile';
+import Statistics from '../../screens/TabScreens/ProfileScreens/Statistics';
+import Licences from '../../screens/TabScreens/ProfileScreens/Licences';
 import Library from '../../screens/TabScreens/Library';
 import Weather from '../../screens/TabScreens/Weather';
 import Scores from '../../screens/TabScreens/Scores';
@@ -22,6 +24,8 @@ import {createStackNavigator} from 'react-navigation-stack';
 const ProfileNavigator = createStackNavigator(
   {
     Profile: Profile,
+    Statistics: Statistics,
+    Licences: Licences,
   },
   {
     defaultNavigationOptions: defaultNavOptions,

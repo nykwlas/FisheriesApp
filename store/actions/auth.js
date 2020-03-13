@@ -220,7 +220,8 @@ export const deleteAccount = () => {
   return async dispatch => {
     const userData = await AsyncStorage.getItem('userData');
     const transformedData = JSON.parse(userData);
-    const {token} = transformedData;
+    const {token, userId} = transformedData;
+    await deleteFromFirebase(userId);
     const response = await fetch(
       'https://identitytoolkit.googleapis.com/v1/accounts:delete?key=AIzaSyBEbKwUIcUAjhIDaOQzxX5Tqm_jTGI7FJY',
       {
@@ -254,15 +255,9 @@ export const handleUpload = source => {
     const transformedData = JSON.parse(userData);
     const {userId} = transformedData;
     const blob = await uriToBlob(source);
-    const url =
-      'https://firebasestorage.googleapis.com/v0/b/shopapp-d5c17.appspot.com/o/ProfileImages%2F' +
-      userId +
-      '.jpg?alt=media';
     try {
-      const snapshot = await uploadToFirebase(blob, userId);
+      await uploadToFirebase(blob, userId);
       console.log('File uploaded');
-      // updatePhotoUrl(url); //&token=33ad29d0-d56d-4e24-a988-d7a1acbc9463
-      // getProfile();
     } catch (error) {
       console.log(error);
       throw error;
@@ -290,6 +285,22 @@ const uriToBlob = uri => {
 
     xhr.open('GET', uri, true);
     xhr.send(null);
+  });
+};
+
+const deleteFromFirebase = userId => {
+  return new Promise(async (resolve, reject) => {
+    var desertRef = firebase.storage().ref();
+
+    desertRef
+      .child('ProfileImages/' + userId + '.jpg')
+      .delete()
+      .then(snapshot => {
+        resolve(snapshot);
+      })
+      .catch(error => {
+        reject(error);
+      });
   });
 };
 

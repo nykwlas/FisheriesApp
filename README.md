@@ -1,2 +1,2 @@
-# FishStory
+# FisheriesApp
 Fisheries Mobile Application

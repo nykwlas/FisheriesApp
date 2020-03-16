@@ -4,7 +4,11 @@ import {Text, Platform} from 'react-native';
 import Profile from '../../screens/TabScreens/ProfileScreens/Profile';
 import Statistics from '../../screens/TabScreens/ProfileScreens/Statistics';
 import Licences from '../../screens/TabScreens/ProfileScreens/Licences';
-import Library from '../../screens/TabScreens/Library';
+import Library from '../../screens/TabScreens/LibraryScreens/Library';
+import PlacesList from '../../screens/TabScreens/LibraryScreens/Places/PlacesList';
+import PlaceDetail from '../../screens/TabScreens/LibraryScreens/Places/PlaceDetail';
+import NewPlace from '../../screens/TabScreens/LibraryScreens/Places/NewPlace';
+import MapScreen from '../../screens/TabScreens/LibraryScreens/Places/Map';
 import Weather from '../../screens/TabScreens/Weather';
 import Scores from '../../screens/TabScreens/Scores';
 import Home from '../../screens/TabScreens/HomeScreens/Home';
@@ -35,6 +39,10 @@ const ProfileNavigator = createStackNavigator(
 const LibraryNavigator = createStackNavigator(
   {
     Library: Library,
+    Category_c7: PlacesList,
+    PlaceDetail: PlaceDetail,
+    NewPlace: NewPlace,
+    Map: MapScreen,
   },
   {
     defaultNavigationOptions: defaultNavOptions,

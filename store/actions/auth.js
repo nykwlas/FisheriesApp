@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import * as firebase from 'firebase/app';
 import 'firebase/storage';
+import { Alert } from 'react-native';
 
 export const AUTHENTICATE = 'AUTHENTICATE';
 export const PROFILE = 'PROFILE';

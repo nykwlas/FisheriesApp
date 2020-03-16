@@ -92,6 +92,7 @@ const Weather = props => {
       if (!isEmpty(cityPicked) && !(cityPicked === 'My Location')) {
         await dispatch(weatherActions.fetchWeatherData(cityPicked, null));
       } else {
+        // console.log(position.longitude, position.latitude);
         await dispatch(
           weatherActions.fetchWeatherData(
             position.latitude,
@@ -103,15 +104,7 @@ const Weather = props => {
       console.log(err.message);
       setError(err.message);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    dispatch,
-    setIsLoading,
-    setError,
-    position.latitude,
-    position.longitude,
-    cityPicked,
-  ]);
+  }, [dispatch, setError, position.latitude, position.longitude, cityPicked]);
 
   const loadForecast = useCallback(async () => {
     setError(null);
@@ -130,24 +123,16 @@ const Weather = props => {
       console.log(err.message);
       setError(err.message);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    dispatch,
-    setIsLoading,
-    setError,
-    position.latitude,
-    position.longitude,
-    cityPicked,
-  ]);
+  }, [dispatch, setError, position.latitude, position.longitude, cityPicked]);
 
-  const loadData = () => {
+  const loadData = useCallback(() => {
     setIsLoading(true);
     loadForecast().then(() => {
       loadWeather().then(() => {
         setIsLoading(false);
       });
     });
-  };
+  }, [loadForecast, loadWeather]);
 
   const onSelectModalPicker = picked => {
     setCityPicked(picked.key);
@@ -197,14 +182,14 @@ const Weather = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [toggleModal]);
 
-  const getPosition = () => {
+  const getPosition = useCallback(() => {
     Geolocation.getCurrentPosition(pos => {
       setPosition({
         latitude: pos.coords.latitude,
         longitude: pos.coords.longitude,
       });
     });
-  };
+  }, []);
 
   useEffect(() => {
     getPosition();
@@ -217,13 +202,19 @@ const Weather = props => {
       willFocusSub.remove();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loadWeather, loadForecast, setCityPicked]);
+  }, [loadWeather, loadForecast, setCityPicked, getPosition]);
 
   useEffect(() => {
     getPosition();
     loadData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, loadForecast, loadWeather, setCityPicked]);
+  }, [
+    dispatch,
+    getPosition,
+    loadData,
+    loadForecast,
+    loadWeather,
+    setCityPicked,
+  ]);
 
   if (error) {
     return (
@@ -232,6 +223,7 @@ const Weather = props => {
         <Button
           title="Try again"
           onPress={() => {
+            getPosition();
             loadData();
           }}
           color={Colors.primary}

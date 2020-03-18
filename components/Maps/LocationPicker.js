@@ -82,6 +82,7 @@ const LocationPicker = props => {
         />
         <Button
           title="Pick on Map"
+          disabled={true}
           color={Colors.primary}
           onPress={pickOnMapHandler}
         />

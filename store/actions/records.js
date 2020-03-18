@@ -26,7 +26,7 @@ export const fetchRecords = () => {
         for (const key2 in resData[key].catches) {
           catches.push(
             new Catch(
-              key,
+              key2,
               resData[key].catches[key2].kind,
               resData[key].catches[key2].weight,
               resData[key].catches[key2].length,
@@ -103,7 +103,6 @@ export const createRecord = (title, description, imageUrl, date, catches) => {
     );
 
     const resData = await response.json();
-
     dispatch({
       type: CREATE_RECORD,
       recordData: {

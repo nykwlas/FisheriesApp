@@ -1,11 +1,23 @@
 import React from 'react';
-import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  Platform,
+} from 'react-native';
 import Colors from '../../constants/Colors';
 
 const PlaceItem = props => {
   return (
     <TouchableOpacity onPress={props.onSelect} style={styles.placeItem}>
-      <Image style={styles.image} source={{uri: props.image}} />
+      <Image
+        style={styles.image}
+        source={{
+          uri: Platform.OS === 'ios' ? props.image : `file://${props.image}`,
+        }}
+      />
       <View style={styles.infoContainer}>
         <Text style={styles.title}>{props.title}</Text>
         <Text style={styles.address}>{props.address}</Text>

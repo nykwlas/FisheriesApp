@@ -25,7 +25,6 @@ npm install --save @react-native-community/geolocation
 npm install --save firebase
 npm install --save react-native-image-picker
 npm install --save react-native-dialog
-npm install react-native-sqlite-storage --save
 npm install react-native-fs --save
 npm install react-native-maps --save-exact
 

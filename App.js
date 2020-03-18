@@ -17,17 +17,6 @@ import firebaseConfig from './config/Firebase/firebaseConfig';
 import * as firebase from 'firebase/app';
 import 'firebase/storage';
 
-import {init} from './helpers/db';
-
-init()
-  .then(() => {
-    console.log('Initialized database');
-  })
-  .catch(err => {
-    console.log('Initializing db failed.');
-    console.log(err);
-  });
-
 const rootReducer = combineReducers({
   records: recordsReducer,
   auth: authReducer,

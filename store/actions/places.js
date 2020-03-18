@@ -3,6 +3,7 @@ import Place from '../../models/place';
 
 export const ADD_PLACE = 'ADD_PLACE';
 export const SET_PLACES = 'SET_PLACES';
+export const DELETE_PLACES = 'DELETE_PLACES';
 
 export const addPlace = (title, image, location) => {
   return async (dispatch, getState) => {
@@ -114,5 +115,22 @@ export const loadPlaces = () => {
       console.log(err);
       throw err;
     }
+  };
+};
+
+export const deletePlace = placeId => {
+  return async (dispatch, getState) => {
+    const token = getState().auth.token;
+    const response = await fetch(
+      `https://shopapp-d5c17.firebaseio.com/places/${placeId}.json?auth=${token}`,
+      {
+        method: 'DELETE',
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error('Something went wrong!');
+    }
+    dispatch({type: DELETE_PLACES, pid: placeId});
   };
 };

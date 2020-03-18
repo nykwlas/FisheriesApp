@@ -67,16 +67,21 @@ const Home = props => {
   };
 
   const deleteHandler = id => {
-    Alert.alert('Are you sure?', 'Do you really want to delete this record?', [
-      {text: 'No', style: 'default'},
-      {
-        text: 'Yes',
-        style: 'destructive',
-        onPress: () => {
-          dispatch(recordActions.deleteRecord(id));
+    Alert.alert(
+      'Are you sure?',
+      'Do you really want to delete this record?',
+      [
+        {text: 'No', style: 'default'},
+        {
+          text: 'Yes',
+          style: 'destructive',
+          onPress: () => {
+            dispatch(recordActions.deleteRecord(id));
+          },
         },
-      },
-    ]);
+      ],
+      {cancelable: true},
+    );
   };
 
   if (error) {

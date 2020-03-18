@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
+import FormButton from '../../components/Buttons/FormButton';
+import {Icon} from 'react-native-elements';
 import Colors from '../../constants/Colors';
 
 const PlaceItem = props => {
@@ -20,7 +22,20 @@ const PlaceItem = props => {
       />
       <View style={styles.infoContainer}>
         <Text style={styles.title}>{props.title}</Text>
-        <Text style={styles.address}>{props.address}</Text>
+        <Text style={styles.address}>props.address</Text>
+      </View>
+      <View>
+        <FormButton
+          buttonType="outline"
+          onPress={props.onDelete}
+          icon={{
+            name: 'trash',
+            type: 'font-awesome',
+            size: 30,
+            color: Colors.primary,
+          }}
+          buttonColor="white"
+        />
       </View>
     </TouchableOpacity>
   );
@@ -45,7 +60,7 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     marginLeft: 25,
-    width: 250,
+    width: '65%',
     justifyContent: 'center',
     alignItems: 'flex-start',
   },

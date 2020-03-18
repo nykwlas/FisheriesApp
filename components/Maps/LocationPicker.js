@@ -53,6 +53,7 @@ const LocationPicker = props => {
         'Could not fetch location!',
         'Please try again later or pick a location on the map.',
         [{text: 'Okay'}],
+        {cancelable: true},
       );
     }
     setIsFetching(false);

@@ -104,7 +104,9 @@ const NewPlaceScreen = props => {
 
   useEffect(() => {
     if (error) {
-      Alert.alert('An error occurred!', error, [{text: 'Okay'}]);
+      Alert.alert('An error occurred!', error, [{text: 'Okay'}], {
+        cancelable: true,
+      });
     }
   }, [error]);
 
@@ -114,6 +116,7 @@ const NewPlaceScreen = props => {
         'Something is Wrong!',
         'Please fill all inputs  in the form.',
         [{text: 'Okay'}],
+        {cancelable: true},
       );
       return;
     }

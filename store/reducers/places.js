@@ -1,4 +1,4 @@
-import {ADD_PLACE, SET_PLACES} from '../actions/places';
+import {ADD_PLACE, SET_PLACES, DELETE_PLACES} from '../actions/places';
 import Place from '../../models/place';
 
 const initialState = {
@@ -27,6 +27,12 @@ export default (state = initialState, action) => {
         ...state,
         places: state.places.concat(newPlace),
         userPlaces: state.userPlaces.concat(newPlace),
+      };
+    case DELETE_PLACES:
+      return {
+        ...state,
+        places: state.places.filter(place => place.id !== action.pid),
+        userPlaces: state.userPlaces.filter(place => place.id !== action.pid),
       };
     default:
       return state;

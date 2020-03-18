@@ -67,16 +67,21 @@ const PlacesListScreen = props => {
   };
 
   const deleteHandler = id => {
-    Alert.alert('Are you sure?', 'Do you really want to delete this record?', [
-      {text: 'No', style: 'default'},
-      {
-        text: 'Yes',
-        style: 'destructive',
-        onPress: () => {
-          dispatch(placesActions.deleteRecord(id));
+    Alert.alert(
+      'Are you sure?',
+      'Do you really want to delete this place?',
+      [
+        {text: 'No', style: 'default'},
+        {
+          text: 'Yes',
+          style: 'destructive',
+          onPress: () => {
+            dispatch(placesActions.deletePlace(id));
+          },
         },
-      },
-    ]);
+      ],
+      {cancelable: true},
+    );
   };
 
   if (error) {
@@ -127,6 +132,9 @@ const PlacesListScreen = props => {
               itemData.item.title,
               itemData.item.imageUri,
             );
+          }}
+          onDelete={() => {
+            deleteHandler(itemData.item.id);
           }}
         />
       )}

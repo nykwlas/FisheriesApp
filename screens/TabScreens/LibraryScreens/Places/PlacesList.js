@@ -58,10 +58,11 @@ const PlacesListScreen = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, loadPlaces]);
 
-  const selectItemHandler = (id, title) => {
+  const selectItemHandler = (id, title, image) => {
     props.navigation.navigate('PlaceDetail', {
       placeTitle: title,
       placeId: id,
+      image: image,
     });
   };
 
@@ -121,7 +122,11 @@ const PlacesListScreen = props => {
           title={itemData.item.title}
           // address={itemData.item.address}
           onSelect={() => {
-            selectItemHandler(itemData.item.title, itemData.item.id);
+            selectItemHandler(
+              itemData.item.id,
+              itemData.item.title,
+              itemData.item.imageUri,
+            );
           }}
         />
       )}

@@ -34,7 +34,9 @@ const Input = props => {
   useEffect(() => {
     if (inputState.touched) {
       onInputChange(id, inputState.value, inputState.isValid);
-      onInputChangeSet(inputState.value);
+      if (onInputChangeSet) {
+        onInputChangeSet(inputState.value);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputState, onInputChange, id, onInputChangeSet]);
@@ -66,10 +68,10 @@ const Input = props => {
 
   return (
     <View style={{...styles.formControl, ...props.style}}>
-      <Text style={styles.label}>{props.label}</Text>
+      <Text style={{...styles.label, ...props.styleLabel}}>{props.label}</Text>
       <TextInput
         {...props}
-        style={styles.input}
+        style={{...styles.input, ...props.styleTextInput}}
         value={inputState.value}
         onChangeText={text => {
           inputState.touched = true;

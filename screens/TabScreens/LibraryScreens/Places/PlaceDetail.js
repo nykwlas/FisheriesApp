@@ -1,37 +1,52 @@
 import React from 'react';
-import {ScrollView, Image, View, Text, StyleSheet} from 'react-native';
+import {
+  ScrollView,
+  Image,
+  View,
+  Text,
+  StyleSheet,
+  Platform,
+} from 'react-native';
 import {useSelector} from 'react-redux';
 
-import MapPreview from '../../../../components/Maps/MapPreview';
+// import MapPreview from '../../../../components/Maps/MapPreview';
 import Colors from '../../../../constants/Colors';
 
 const PlaceDetailScreen = props => {
   const placeId = props.navigation.getParam('placeId');
+  const image = props.navigation.getParam('image');
   const selectedPlace = useSelector(state =>
     state.places.places.find(place => place.id === placeId),
   );
-
   const selectedLocation = {lat: selectedPlace.lat, lng: selectedPlace.lng};
 
-  const showMapHandler = () => {
-    props.navigation.navigate('Map', {
-      readonly: true,
-      initialLocation: selectedLocation,
-    });
-  };
+  // const showMapHandler = () => {
+  //   props.navigation.navigate('Map', {
+  //     readonly: true,
+  //     initialLocation: selectedLocation,
+  //   });
+  // };
 
   return (
     <ScrollView contentContainerStyle={{alignItems: 'center'}}>
-      <Image source={{uri: selectedPlace.imageUri}} style={styles.image} />
+      <Image
+        source={{
+          uri: Platform.OS === 'ios' ? image : `file://${image}`,
+        }}
+        style={styles.image}
+      />
       <View style={styles.locationContainer}>
         <View style={styles.addressContainer}>
+          <Text style={styles.addressTitle}>Place Data</Text>
+          <Text style={styles.address}>Latitude: {selectedLocation.lat}</Text>
+          <Text style={styles.address}>Longitude: {selectedLocation.lng}</Text>
           <Text style={styles.address}>selectedPlace.address</Text>
         </View>
-        <MapPreview
+        {/* <MapPreview
           style={styles.mapPreview}
           location={selectedLocation}
           onPress={showMapHandler}
-        />
+        /> */}
       </View>
     </ScrollView>
   );
@@ -70,6 +85,12 @@ const styles = StyleSheet.create({
   address: {
     color: Colors.primary,
     textAlign: 'center',
+  },
+  addressTitle: {
+    color: 'black',
+    textAlign: 'center',
+    fontSize: 20,
+    paddingBottom: 10,
   },
   mapPreview: {
     width: '100%',

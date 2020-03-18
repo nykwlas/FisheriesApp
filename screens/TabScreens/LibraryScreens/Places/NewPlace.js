@@ -1,20 +1,45 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useEffect, useCallback, useReducer} from 'react';
 import {
   ScrollView,
   View,
   Button,
-  Text,
-  TextInput,
   StyleSheet,
   Alert,
   ActivityIndicator,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
+import Input from '../../../../components/Input/Input';
 
 import Colors from '../../../../constants/Colors';
 import * as placesActions from '../../../../store/actions/places';
 import ImagePicker from '../../../../components/Maps/ImagePicker';
 import LocationPicker from '../../../../components/Maps/LocationPicker';
+
+const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
+
+const formReducer = (state, action) => {
+  if (action.type === FORM_INPUT_UPDATE) {
+    const updatedValues = {
+      ...state.inputValues,
+      [action.input]: action.value,
+    };
+    const updatedValidities = {
+      ...state.inputValidities,
+      [action.input]: action.isValid,
+    };
+    let updatedFormIsValid = true;
+    // eslint-disable-next-line no-unused-vars
+    for (const key in updatedValidities) {
+      updatedFormIsValid = updatedFormIsValid && updatedValidities[key];
+    }
+    return {
+      formIsValid: updatedFormIsValid,
+      inputValidities: updatedValidities,
+      inputValues: updatedValues,
+    };
+  }
+  return state;
+};
 
 const NewPlaceScreen = props => {
   const [titleValue, setTitleValue] = useState('');
@@ -25,16 +50,55 @@ const NewPlaceScreen = props => {
 
   const dispatch = useDispatch();
 
-  const titleChangeHandler = text => {
-    // you could add validation
-    setTitleValue(text);
-  };
+  const [formState, dispatchFormState] = useReducer(formReducer, {
+    inputValues: {
+      title: '',
+      image: '',
+      location: {},
+    },
+    inputValidities: {
+      title: false,
+      image: false,
+      location: false,
+    },
+    formIsValid: false,
+  });
+
+  // const titleChangeHandler = text => {
+  //   // you could add validation
+  //   setTitleValue(text);
+  // };
+
+  const titleChangeHandler = useCallback(
+    (inputIdentifier, inputValue, inputValidity) => {
+      dispatchFormState({
+        type: FORM_INPUT_UPDATE,
+        value: inputValue,
+        isValid: inputValidity,
+        input: inputIdentifier,
+      });
+      setTitleValue(inputValue);
+    },
+    [dispatchFormState],
+  );
 
   const imageTakenHandler = imagePath => {
+    dispatchFormState({
+      type: FORM_INPUT_UPDATE,
+      value: imagePath,
+      isValid: true,
+      input: 'image',
+    });
     setSelectedImage(imagePath);
   };
 
   const locationPickedHandler = useCallback(location => {
+    dispatchFormState({
+      type: FORM_INPUT_UPDATE,
+      value: location,
+      isValid: true,
+      input: 'location',
+    });
     setSelectedLocation(location);
   }, []);
 
@@ -45,7 +109,7 @@ const NewPlaceScreen = props => {
   }, [error]);
 
   const savePlaceHandler = useCallback(async () => {
-    if (false) {
+    if (!formState.formIsValid) {
       Alert.alert(
         'Something is Wrong!',
         'Please fill all inputs  in the form.',
@@ -78,11 +142,20 @@ const NewPlaceScreen = props => {
   return (
     <ScrollView>
       <View style={styles.form}>
-        <Text style={styles.label}>Title</Text>
-        <TextInput
-          style={styles.textInput}
-          onChangeText={titleChangeHandler}
-          value={titleValue}
+        <Input
+          styleTextInput={styles.textInput}
+          styleLabel={styles.title}
+          label="Title"
+          id="title"
+          errorText="Please enter at least 5 characters!"
+          keyboardType="default"
+          returnKeyType="done"
+          autoCapitalize="sentences"
+          onInputChange={titleChangeHandler}
+          initialValue={''}
+          initiallyValid={false}
+          required
+          minLength={5}
         />
         <ImagePicker onImageTaken={imageTakenHandler} />
         <LocationPicker
@@ -109,19 +182,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  title: {
+    fontSize: 20,
+  },
   form: {
     margin: 30,
   },
   label: {
     fontSize: 18,
-    marginBottom: 15,
+    // marginBottom: 15,
   },
   textInput: {
-    borderBottomColor: '#ccc',
-    borderBottomWidth: 1,
     marginBottom: 15,
-    paddingVertical: 4,
-    paddingHorizontal: 2,
   },
 });
 

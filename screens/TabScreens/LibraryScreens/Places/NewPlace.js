@@ -1,19 +1,14 @@
 import React, {useState, useEffect, useCallback, useReducer} from 'react';
-import {
-  ScrollView,
-  View,
-  Button,
-  StyleSheet,
-  Alert,
-  ActivityIndicator,
-} from 'react-native';
+import {ScrollView, View, Button, StyleSheet, Alert} from 'react-native';
 import {useDispatch} from 'react-redux';
 import Input from '../../../../components/Input/Input';
 
 import Colors from '../../../../constants/Colors';
+
 import * as placesActions from '../../../../store/actions/places';
 import ImagePicker from '../../../../components/Maps/ImagePicker';
 import LocationPicker from '../../../../components/Maps/LocationPicker';
+import Loading from '../../../../components/Loading';
 
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 
@@ -135,11 +130,7 @@ const NewPlaceScreen = props => {
   }, [dispatch, selectedImage, selectedLocation, titleValue]);
 
   if (isLoading) {
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" color={Colors.primary} />
-      </View>
-    );
+    return <Loading />;
   }
 
   return (
@@ -180,11 +171,6 @@ NewPlaceScreen.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
-  centered: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   title: {
     fontSize: 20,
   },

@@ -1,6 +1,7 @@
 import React from 'react';
 import {TouchableOpacity, Image, StyleSheet} from 'react-native';
 
+import Styles from '../../constants/Styles';
 import googleApiKey from '../../config/GoogleMaps/googleMapsAPI';
 
 const MapPreview = props => {
@@ -21,7 +22,7 @@ const MapPreview = props => {
       onPress={props.onPress}
       style={{...styles.mapPreview, ...props.style}}>
       {props.location ? (
-        <Image style={styles.mapImage} source={{uri: imagePreviewUrl}} />
+        <Image style={Styles.image} source={{uri: imagePreviewUrl}} />
       ) : (
         props.children
       )}
@@ -33,10 +34,6 @@ const styles = StyleSheet.create({
   mapPreview: {
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  mapImage: {
-    width: '100%',
-    height: '100%',
   },
 });
 

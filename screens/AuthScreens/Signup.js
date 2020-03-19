@@ -13,9 +13,6 @@ import FormButton from '../../components/Buttons/FormButton';
 import ErrorMessage from '../../components/Input/ErrorMessage';
 import * as authActions from '../../store/actions/auth';
 import Colors from '../../constants/Colors';
-// import firebaseConfig from '../../config/Firebase/firebaseConfig';
-// import * as firebase from 'firebase/app';
-// import 'firebase/storage';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string()
@@ -81,7 +78,6 @@ const Signup = props => {
           actions.setFieldError('general', error.message);
         }
       });
-      // firebase.initializeApp(firebaseConfig);
       props.navigation.navigate('App');
     } catch (error) {
       actions.setFieldError('general', error.message);
@@ -219,7 +215,6 @@ const Signup = props => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: '#fff',
   },
   logoContainer: {
     marginBottom: 15,

@@ -6,7 +6,6 @@ import React, {
   Fragment,
 } from 'react';
 import {
-  ActivityIndicator,
   Platform,
   StyleSheet,
   ScrollView,
@@ -31,10 +30,10 @@ import FormRecordButton from '../../../components/Buttons/FormRecordButton';
 import FormInput from '../../../components/Input/FormInput';
 import FormButton from '../../../components/Buttons/FormButton';
 import ErrorMessage from '../../../components/Input/ErrorMessage';
+import Loading from '../../../components/Loading';
 import Catch from '../../../models/catch';
 
 import * as recordActions from '../../../store/actions/records';
-import Colors from '../../../constants/Colors';
 
 import {Formik} from 'formik';
 import * as Yup from 'yup';
@@ -265,11 +264,7 @@ const RecordForm = props => {
   };
 
   if (isLoading) {
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" color={Colors.primary} />
-      </View>
-    );
+    return <Loading />;
   }
 
   return (
@@ -544,11 +539,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-  },
-  centered: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   buttonContainer: {
     marginTop: 10,

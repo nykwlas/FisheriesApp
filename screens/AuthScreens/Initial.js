@@ -1,14 +1,9 @@
 import React, {useEffect} from 'react';
-import {ActivityIndicator, StyleSheet, View} from 'react-native';
 import {useDispatch} from 'react-redux';
 
 import AsyncStorage from '@react-native-community/async-storage';
-
-import Colors from '../../constants/Colors';
 import * as authActions from '../../store/actions/auth';
-// import firebaseConfig from '../../config/Firebase/firebaseConfig';
-// import * as firebase from 'firebase/app';
-// import 'firebase/storage';
+import Loading from '../../components/Loading';
 
 const Initial = props => {
   const dispatch = useDispatch();
@@ -30,7 +25,6 @@ const Initial = props => {
       }
 
       const expirationTime = expirationDate.getTime() - new Date().getTime();
-      // firebase.initializeApp(firebaseConfig);
       props.navigation.navigate('App');
       dispatch(authActions.authenticate(userId, token, expirationTime));
       await dispatch(authActions.getProfile());
@@ -40,19 +34,7 @@ const Initial = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
-  return (
-    <View style={styles.screen}>
-      <ActivityIndicator size="large" color={Colors.primary} />
-    </View>
-  );
+  return <Loading />;
 };
-
-const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
 
 export default Initial;

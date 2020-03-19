@@ -6,7 +6,6 @@ import {
   FlatList,
   Dimensions,
   StyleSheet,
-  ActivityIndicator,
   Platform,
   Image,
 } from 'react-native';
@@ -15,10 +14,10 @@ import {HeaderButtons, Item} from 'react-navigation-header-buttons';
 import Geolocation from '@react-native-community/geolocation';
 import ModalFilterPicker from 'react-native-modal-filter-picker';
 
-import HeaderButton from '../../components/Buttons/HeaderButton';
-import {Button} from 'react-native-elements';
-import Colors from '../../constants/Colors';
 import * as weatherActions from '../../store/actions/weather';
+import HeaderButton from '../../components/Buttons/HeaderButton';
+import Loading from '../../components/Loading';
+import Error from '../../components/Error';
 
 const weatherIcons = {
   '01d': require('../../assets/weather/01d.png'),
@@ -189,7 +188,8 @@ const Weather = props => {
         longitude: pos.coords.longitude,
       });
     });
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cityPicked]);
 
   useEffect(() => {
     getPosition();
@@ -218,26 +218,17 @@ const Weather = props => {
 
   if (error) {
     return (
-      <View style={styles.center}>
-        <Text>An error occurred!</Text>
-        <Button
-          title="Try again"
-          onPress={() => {
-            getPosition();
-            loadData();
-          }}
-          color={Colors.primary}
-        />
-      </View>
+      <Error
+        onRetry={() => {
+          getPosition();
+          loadData();
+        }}
+      />
     );
   }
 
   if (isLoading || isEmpty(weatherData) || isEmpty(forecastData)) {
-    return (
-      <View style={styles.center}>
-        <ActivityIndicator size="large" color={Colors.primary} />
-      </View>
-    );
+    return <Loading />;
   }
 
   const transformDate = date => {
@@ -314,7 +305,7 @@ const Weather = props => {
   return (
     <ScrollView style={styles.backColor}>
       <View style={styles.flex}>
-        <View style={styles.centered}>
+        <View style={styles.center}>
           <Text style={[styles.text, styles.fontLarge]}>
             {forecastData.city.name}
           </Text>
@@ -514,11 +505,6 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   center: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  centered: {
     justifyContent: 'flex-start',
     alignItems: 'center',
   },

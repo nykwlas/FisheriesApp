@@ -1,7 +1,6 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import * as firebase from 'firebase/app';
 import 'firebase/storage';
-import { Alert } from 'react-native';
 
 export const AUTHENTICATE = 'AUTHENTICATE';
 export const PROFILE = 'PROFILE';
@@ -178,7 +177,7 @@ export const login = (email, password) => {
     }
 
     const resData = await response.json();
-    console.log(resData);
+    // console.log(resData);
     dispatch(
       authenticate(
         resData.localId,
@@ -258,7 +257,7 @@ export const handleUpload = source => {
     const blob = await uriToBlob(source);
     try {
       await uploadToFirebase(blob, userId);
-      console.log('File uploaded');
+      // console.log('File uploaded');
     } catch (error) {
       console.log(error);
       throw error;

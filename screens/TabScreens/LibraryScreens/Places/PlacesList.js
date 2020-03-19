@@ -1,22 +1,15 @@
 import React, {useEffect, useState, useCallback} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Platform,
-  FlatList,
-  ActivityIndicator,
-  Alert,
-} from 'react-native';
+import {View, Text, Platform, FlatList, Alert} from 'react-native';
 import {HeaderButtons, Item} from 'react-navigation-header-buttons';
 import {useSelector, useDispatch} from 'react-redux';
-import {Button} from 'react-native-elements';
 
 import HeaderButton from '../../../../components/Buttons/HeaderButton';
 import PlaceItem from '../../../../components/Maps/PlaceItem';
+import Loading from '../../../../components/Loading';
+import Error from '../../../../components/Error';
 import * as placesActions from '../../../../store/actions/places';
 
-import Colors from '../../../../constants/Colors';
+import Styles from '../../../../constants/Styles';
 
 const PlacesListScreen = props => {
   const [isLoading, setIsLoading] = useState(false);
@@ -86,30 +79,21 @@ const PlacesListScreen = props => {
 
   if (error) {
     return (
-      <View style={styles.centered}>
-        <Text>An error occurred!</Text>
-        <Button
-          title="Try again"
-          onPress={() => {
-            loadData();
-          }}
-          color={Colors.primary}
-        />
-      </View>
+      <Error
+        onRetry={() => {
+          loadData();
+        }}
+      />
     );
   }
 
   if (isLoading) {
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" color={Colors.primary} />
-      </View>
-    );
+    return <Loading />;
   }
 
   if (!isLoading && places.length === 0) {
     return (
-      <View style={styles.centered}>
+      <View style={Styles.centered}>
         <Text>No places found. Maybe start adding some!</Text>
       </View>
     );
@@ -158,13 +142,5 @@ PlacesListScreen.navigationOptions = navData => {
     ),
   };
 };
-
-const styles = StyleSheet.create({
-  centered: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
 
 export default PlacesListScreen;

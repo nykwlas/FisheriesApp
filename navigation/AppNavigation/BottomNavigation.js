@@ -12,7 +12,6 @@ import MapScreen from '../../screens/TabScreens/LibraryScreens/Places/Map';
 import Weather from '../../screens/TabScreens/Weather';
 import Scores from '../../screens/TabScreens/Scores';
 import Home from '../../screens/TabScreens/HomeScreens/Home';
-
 import RecordDetail from '../../screens/TabScreens/HomeScreens/RecordDetail';
 import RecordForm from '../../screens/TabScreens/HomeScreens/RecordForm';
 

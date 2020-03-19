@@ -14,9 +14,6 @@ import FormButton from '../../components/Buttons/FormButton';
 import ErrorMessage from '../../components/Input/ErrorMessage';
 import AppLogo from '../../components/AppLogo';
 import * as authActions from '../../store/actions/auth';
-// import firebaseConfig from '../../config/Firebase/firebaseConfig';
-// import * as firebase from 'firebase/app';
-// import 'firebase/storage';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -153,7 +150,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 30,
-    // backgroundColor: '#fff',
   },
   logoContainer: {
     marginBottom: 15,

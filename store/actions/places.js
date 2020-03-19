@@ -33,7 +33,7 @@ export const addPlace = (title, image, location) => {
     try {
       RNFS.moveFile(image, path)
         .then(success => {
-          console.log('FILE WRITTEN!');
+          // console.log('FILE WRITTEN!');
         })
         .catch(err => {
           console.log(err.message);

@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 
 import Card from '../UI/Card';
+import Styles from '../../constants/Styles';
 
 const RecordItem = props => {
   let TouchableCmp = TouchableOpacity;
@@ -24,7 +25,7 @@ const RecordItem = props => {
         <TouchableCmp onPress={props.onSelect} useForeground>
           <View>
             <View style={styles.imageContainer}>
-              <Image style={styles.image} source={{uri: props.image}} />
+              <Image style={Styles.image} source={{uri: props.image}} />
             </View>
             <View style={styles.details}>
               <Text style={styles.title}>{props.title}</Text>
@@ -53,10 +54,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     overflow: 'hidden',
-  },
-  image: {
-    width: '100%',
-    height: '100%',
   },
   details: {
     alignItems: 'center',

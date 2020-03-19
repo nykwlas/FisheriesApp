@@ -3,6 +3,7 @@ import {View, Button, Image, Text, StyleSheet} from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 
 import Colors from '../../constants/Colors';
+import Styles from '../../constants/Styles';
 
 const ImgPicker = props => {
   const [pickedImage, setPickedImage] = useState();
@@ -11,7 +12,6 @@ const ImgPicker = props => {
     title: 'Select Profile picture',
     storageOptions: {
       skipBackup: true,
-      // path: 'images',
     },
   };
 
@@ -37,7 +37,7 @@ const ImgPicker = props => {
         {!pickedImage ? (
           <Text>No image picked yet.</Text>
         ) : (
-          <Image style={styles.image} source={{uri: pickedImage}} />
+          <Image style={Styles.image} source={{uri: pickedImage}} />
         )}
       </View>
       <Button
@@ -62,10 +62,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderColor: '#ccc',
     borderWidth: 1,
-  },
-  image: {
-    width: '100%',
-    height: '100%',
   },
 });
 

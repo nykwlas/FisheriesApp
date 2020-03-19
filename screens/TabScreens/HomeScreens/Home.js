@@ -1,13 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  Alert,
-  View,
-  FlatList,
-  ActivityIndicator,
-} from 'react-native';
+import {Platform, StyleSheet, Text, Alert, View, FlatList} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {Button} from 'react-native-elements';
@@ -16,8 +8,12 @@ import {HeaderButtons, Item} from 'react-navigation-header-buttons';
 import HeaderButton from '../../../components/Buttons/HeaderButton';
 import RecordButton from '../../../components/Buttons/RecordButton';
 import RecordItem from '../../../components/Records/RecordItem';
+import Loading from '../../../components/Loading';
+import Error from '../../../components/Error';
 import * as recordActions from '../../../store/actions/records';
+
 import Colors from '../../../constants/Colors';
+import Styles from '../../../constants/Styles';
 
 const Home = props => {
   const [isLoading, setIsLoading] = useState(false);
@@ -86,30 +82,21 @@ const Home = props => {
 
   if (error) {
     return (
-      <View style={styles.centered}>
-        <Text>An error occurred!</Text>
-        <Button
-          title="Try again"
-          onPress={() => {
-            loadData();
-          }}
-          color={Colors.primary}
-        />
-      </View>
+      <Error
+        onRetry={() => {
+          loadData();
+        }}
+      />
     );
   }
 
   if (isLoading) {
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" color={Colors.primary} />
-      </View>
-    );
+    return <Loading />;
   }
 
   if (!isLoading && records.length === 0) {
     return (
-      <View style={styles.centered}>
+      <View style={Styles.centered}>
         <Text>No records found. Maybe start adding some!</Text>
         <RecordButton
           onPress={() => {
@@ -198,11 +185,6 @@ const styles = StyleSheet.create({
   },
   button: {
     width: '35%',
-  },
-  centered: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });
 

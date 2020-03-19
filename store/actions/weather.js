@@ -31,7 +31,6 @@ export const fetchWeatherData = (lat, lon) => {
 
 export const fetchForecastData = (lat, lon) => {
   return async (dispatch, getState) => {
-    // const currentWeather = getState().weather.currentWeather;
     try {
       let url;
       if (lon === null) {

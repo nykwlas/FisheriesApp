@@ -48,7 +48,6 @@ const Profile = props => {
     title: 'Select Profile picture',
     storageOptions: {
       skipBackup: true,
-      // path: 'images',
     },
   };
 

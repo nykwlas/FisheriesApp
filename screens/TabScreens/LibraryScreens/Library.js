@@ -1,11 +1,10 @@
 import React from 'react';
-import {Platform, StyleSheet, FlatList} from 'react-native';
-import Colors from '../../../constants/Colors';
+import {Platform, FlatList} from 'react-native';
 
 import {HeaderButtons, Item} from 'react-navigation-header-buttons';
 
 import HeaderButton from '../../../components/Buttons/HeaderButton';
-import {CATEGORIES} from '../../../data/dummy-data';
+import {CATEGORIES} from '../../../data/CategoryData';
 import CategoryItem from '../../../components/UI/CategoryItem';
 
 const Library = props => {
@@ -52,17 +51,5 @@ Library.navigationOptions = navData => {
     ),
   };
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.background,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  signOut: {
-    color: '#F57C00',
-  },
-});
 
 export default Library;

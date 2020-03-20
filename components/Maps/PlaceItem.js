@@ -8,7 +8,7 @@ import {
   Platform,
 } from 'react-native';
 import FormButton from '../../components/Buttons/FormButton';
-import {Icon} from 'react-native-elements';
+
 import Colors from '../../constants/Colors';
 
 const PlaceItem = props => {
@@ -26,7 +26,7 @@ const PlaceItem = props => {
       </View>
       <View>
         <FormButton
-          buttonType="outline"
+          buttonType="clear"
           onPress={props.onDelete}
           icon={{
             name: 'trash',

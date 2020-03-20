@@ -32,6 +32,7 @@ import FormButton from '../../../components/Buttons/FormButton';
 import ErrorMessage from '../../../components/Input/ErrorMessage';
 import Loading from '../../../components/Loading';
 import Catch from '../../../models/catch';
+import Colors from '../../../constants/Colors';
 
 import * as recordActions from '../../../store/actions/records';
 
@@ -99,6 +100,7 @@ const formReducer = (state, action) => {
 const RecordForm = props => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
+  const [catchesState, setCatchesState] = useState(true);
 
   const [kindField, setKindField] = useState('');
   const [weightField, setWeightField] = useState('');
@@ -239,9 +241,24 @@ const RecordForm = props => {
     },
   };
 
+  const onCatchDelete = catchId => {
+    catches = catches.filter(catchesF => catchesF.id !== catchId);
+    setCatchesState(!catchesState);
+  };
+
   const handleOnSubmitCatch = (values, actions) => {
     const {kind, weight, length, time, depth, method} = values;
-    const newCatch = new Catch(time, kind, weight, length, time, depth, method);
+    const newCatch = new Catch(
+      time.toString() +
+        new Date().getTime().toString() +
+        Math.floor(Math.random() * Math.floor(new Date().getTime())).toString(),
+      kind,
+      weight,
+      length,
+      time,
+      depth,
+      method,
+    );
     catches.push(newCatch);
     inputChangeHandler('catches', catches, true);
     toggleModal();
@@ -325,14 +342,32 @@ const RecordForm = props => {
             </View>
             <SafeAreaView style={styles.container}>
               <FlatList
+                extraData={catchesState}
                 data={catches}
                 keyExtractor={item => item.id}
                 renderItem={itemData => (
-                  <View style={styles.catchItems}>
-                    <Text>{itemData.item.kind}</Text>
-                    <Text>{itemData.item.time}</Text>
-                    <Text>{itemData.item.length} cm</Text>
-                    <Text>{itemData.item.weight} kg</Text>
+                  <View style={styles.catches}>
+                    <View style={styles.catchItems}>
+                      <Text>{itemData.item.kind}</Text>
+                      <Text>{itemData.item.time}</Text>
+                      <Text>{itemData.item.length} cm</Text>
+                      <Text>{itemData.item.weight} kg</Text>
+                    </View>
+                    <View>
+                      <FormButton
+                        buttonType="clear"
+                        onPress={() => {
+                          onCatchDelete(itemData.item.id);
+                        }}
+                        icon={{
+                          name: 'trash',
+                          type: 'font-awesome',
+                          size: 26,
+                          color: Colors.primary,
+                        }}
+                        buttonColor="white"
+                      />
+                    </View>
                   </View>
                 )}
               />
@@ -587,9 +622,14 @@ const styles = StyleSheet.create({
     // marginBottom: 5,
   },
   catchItems: {
+    width: '80%',
     flexDirection: 'row',
     justifyContent: 'space-around',
-    margin: 15,
+    margin: 12,
+  },
+  catches: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
 });
 

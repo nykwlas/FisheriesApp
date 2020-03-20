@@ -205,8 +205,9 @@ const Weather = props => {
   }, [loadWeather, loadForecast, setCityPicked, getPosition]);
 
   useEffect(() => {
-    getPosition();
-    loadData();
+    getPosition().then(() => {
+      loadData();
+    });
   }, [
     dispatch,
     getPosition,
@@ -220,8 +221,9 @@ const Weather = props => {
     return (
       <Error
         onRetry={() => {
-          getPosition();
-          loadData();
+          getPosition().then(() => {
+            loadData();
+          });
         }}
       />
     );

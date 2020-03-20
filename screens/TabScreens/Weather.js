@@ -181,8 +181,8 @@ const Weather = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [toggleModal]);
 
-  const getPosition = useCallback(() => {
-    Geolocation.getCurrentPosition(pos => {
+  const getPosition = useCallback(async () => {
+    await Geolocation.getCurrentPosition(pos => {
       setPosition({
         latitude: pos.coords.latitude,
         longitude: pos.coords.longitude,

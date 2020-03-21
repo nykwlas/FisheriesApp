@@ -167,6 +167,17 @@ Home.navigationOptions = navData => {
         />
       </HeaderButtons>
     ),
+    headerRight: () => (
+      <HeaderButtons HeaderButtonComponent={HeaderButton}>
+        <Item
+          title="Rooms"
+          iconName={Platform.OS === 'android' ? 'md-mail' : 'ios-mail'}
+          onPress={() => {
+            navData.navigation.navigate('Rooms');
+          }}
+        />
+      </HeaderButtons>
+    ),
   };
 };
 

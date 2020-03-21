@@ -10,6 +10,7 @@ import authReducer from './store/reducers/auth';
 import recordsReducer from './store/reducers/records';
 import weatherReducer from './store/reducers/weather';
 import placesReducer from './store/reducers/places';
+import messagingReducer from './store/reducers/messaging';
 
 import firebaseConfig from './config/Firebase/firebaseConfig';
 import * as firebase from 'firebase/app';
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   auth: authReducer,
   weather: weatherReducer,
   places: placesReducer,
+  messaging: messagingReducer,
 });
 
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));

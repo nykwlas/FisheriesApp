@@ -27,6 +27,7 @@ npm install --save react-native-image-picker
 npm install --save react-native-dialog
 npm install react-native-fs --save
 npm install react-native-maps --save-exact
+npm install react-native-gifted-chat --save
 
 NOT USED npm install --save firebase
 	 npm install --save hoist-non-react-statics
@@ -40,3 +41,11 @@ npm start --reset-cache
 
 npm install --save @react-native-firebase/app 
 react-native-firebase @react-native-firebase/firestore @react-native-firebase/auth
+
+Rules:
+{
+  "rules": {
+    ".read": "auth != null",
+    ".write": "auth != null"
+  }
+}

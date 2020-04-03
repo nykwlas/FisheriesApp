@@ -362,7 +362,7 @@ const Weather = props => {
             data={forecastData.list}
             keyExtractor={item => item.dt_txt + item.dt_txt.toLocaleString} //style={[styles.lineSpaced, {paddingVertical: 5}]}
             renderItem={({item, index, separators}) => {
-              if (transformDate(item.dt).getHours() === 14) {
+              if (transformDate(item.dt).getHours() === 12) {
                 return (
                   <View style={[styles.lineSpaced, styles.padVertical]}>
                     <View style={styles.rowBetween}>

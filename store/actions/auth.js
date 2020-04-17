@@ -254,12 +254,13 @@ export const handleUpload = source => {
     const userData = await AsyncStorage.getItem('userData');
     const transformedData = JSON.parse(userData);
     const {userId} = transformedData;
+    // console.log(userId);
     const blob = await uriToBlob(source);
     try {
       await uploadToFirebase(blob, userId);
       // console.log('File uploaded');
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       throw error;
     }
     // console.log(url);
@@ -315,10 +316,11 @@ const uploadToFirebase = (blob, userId) => {
       })
       .then(snapshot => {
         blob.close();
-
+        // console.log(snapshot);
         resolve(snapshot);
       })
       .catch(error => {
+        // console.log(error);
         reject(error);
       });
   });

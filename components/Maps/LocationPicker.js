@@ -68,7 +68,8 @@ const LocationPicker = props => {
       <MapPreview
         style={styles.mapPreview}
         location={pickedLocation}
-        onPress={pickOnMapHandler}>
+        /*onPress={pickOnMapHandler}*/
+      >
         {isFetching ? (
           <ActivityIndicator size="large" color={Colors.primary} />
         ) : (

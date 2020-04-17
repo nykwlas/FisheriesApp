@@ -2,11 +2,13 @@ import React, {useEffect, useCallback, useState} from 'react';
 import {View} from 'react-native';
 import {GiftedChat, Bubble, Time, Avatar} from 'react-native-gifted-chat';
 import {useSelector, useDispatch} from 'react-redux';
+import Loading from '../../../../components/Loading';
 
 import Error from '../../../../components/Error';
 import * as messagingActions from '../../../../store/actions/messaging';
 
 const Messages = props => {
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const [sendMessage, setSendMessage] = useState(false);
   const userId = useSelector(state => state.auth.userId);
@@ -38,13 +40,21 @@ const Messages = props => {
   }, [loadMessages]);
 
   const loadData = () => {
-    loadMessages();
+    setIsLoading(true);
+    loadMessages().then(() => {
+      setIsLoading(false);
+    });
   };
+
+  useEffect(() => {
+    loadMessages();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, loadMessages, sendMessage]);
 
   useEffect(() => {
     loadData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, loadMessages, sendMessage]);
+  }, [loadMessages]);
 
   const addMessage = async (message = {}) => {
     const messageData = message[0];
@@ -137,6 +147,10 @@ const Messages = props => {
         }}
       />
     );
+  }
+
+  if (isLoading) {
+    return <Loading />;
   }
 
   return (

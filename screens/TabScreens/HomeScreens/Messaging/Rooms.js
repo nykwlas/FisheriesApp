@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
   },
   roomsInput: {
     flex: 1,
-    height: 40,
+    height: 50,
     textAlign: 'center',
     fontSize: 18,
     color: '#1E90FF',

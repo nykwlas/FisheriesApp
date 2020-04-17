@@ -188,8 +188,7 @@ const Weather = props => {
         longitude: pos.coords.longitude,
       });
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cityPicked]);
+  }, []);
 
   useEffect(() => {
     getPosition();
@@ -284,7 +283,7 @@ const Weather = props => {
           },
           {
             title: 'RAIN CHANCE',
-            text: `${100 - weatherData.clouds.all}%`,
+            text: `${weatherData.clouds.all}%`,
           },
         ],
         [

@@ -14,6 +14,7 @@ import FormButton from '../../components/Buttons/FormButton';
 import ErrorMessage from '../../components/Input/ErrorMessage';
 import AppLogo from '../../components/AppLogo';
 import * as authActions from '../../store/actions/auth';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -61,87 +62,89 @@ const Login = props => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <HideWithKeyboard style={styles.logoContainer}>
-        <AppLogo />
-      </HideWithKeyboard>
-      <Formik
-        validateOnMount
-        initialValues={{
-          email: emailField,
-          password: passwordField,
-        }}
-        onSubmit={(values, actions) => {
-          authHandler(values, actions);
-        }}
-        validationSchema={validationSchema}>
-        {({
-          handleChange,
-          values,
-          handleSubmit,
-          errors,
-          isValid,
-          touched,
-          handleBlur,
-          isSubmitting,
-        }) => (
-          <Fragment>
-            <FormInput
-              name="email"
-              value={values.email}
-              onChangeText={
-                (setEmailField(values.email), handleChange('email'))
-              }
-              placeholder="Enter email"
-              autoCapitalize="none"
-              iconName="ios-mail"
-              iconColor="#2C384A"
-              onBlur={handleBlur('email')}
-            />
-            <ErrorMessage errorValue={touched.email && errors.email} />
-            <FormInput
-              name="password"
-              value={values.password}
-              onChangeText={
-                (setPasswordField(values.password), handleChange('password'))
-              }
-              placeholder="Enter password"
-              secureTextEntry={passwordVisibility}
-              iconName="ios-lock"
-              iconColor="#2C384A"
-              onBlur={handleBlur('password')}
-              rightIcon={
-                <TouchableOpacity onPress={handlePasswordVisibility}>
-                  <Icon name={rightIcon} size={28} color="grey" />
-                </TouchableOpacity>
-              }
-            />
-            <ErrorMessage errorValue={touched.password && errors.password} />
-            <View style={styles.buttonContainer}>
-              <FormButton
-                buttonType="outline"
-                onPress={handleSubmit}
-                title="LOGIN"
-                buttonColor="#039BE5"
-                disabled={!isValid || isSubmitting}
-                loading={isSubmitting}
+      <ScrollView>
+        <HideWithKeyboard style={styles.logoContainer}>
+          <AppLogo />
+        </HideWithKeyboard>
+        <Formik
+          validateOnMount
+          initialValues={{
+            email: emailField,
+            password: passwordField,
+          }}
+          onSubmit={(values, actions) => {
+            authHandler(values, actions);
+          }}
+          validationSchema={validationSchema}>
+          {({
+            handleChange,
+            values,
+            handleSubmit,
+            errors,
+            isValid,
+            touched,
+            handleBlur,
+            isSubmitting,
+          }) => (
+            <Fragment>
+              <FormInput
+                name="email"
+                value={values.email}
+                onChangeText={
+                  (setEmailField(values.email), handleChange('email'))
+                }
+                placeholder="Enter email"
+                autoCapitalize="none"
+                iconName="ios-mail"
+                iconColor="#2C384A"
+                onBlur={handleBlur('email')}
               />
-            </View>
-            <ErrorMessage errorValue={errors.general} />
-          </Fragment>
-        )}
-      </Formik>
-      <Button
-        title="Don't have an account? Sign Up"
-        onPress={goToSignup}
-        titleStyle={styles.signUpTitle}
-        type="clear"
-      />
-      <Button
-        title="Forgot Password?"
-        onPress={goToForgotPassword}
-        titleStyle={styles.forgotTitle}
-        type="clear"
-      />
+              <ErrorMessage errorValue={touched.email && errors.email} />
+              <FormInput
+                name="password"
+                value={values.password}
+                onChangeText={
+                  (setPasswordField(values.password), handleChange('password'))
+                }
+                placeholder="Enter password"
+                secureTextEntry={passwordVisibility}
+                iconName="ios-lock"
+                iconColor="#2C384A"
+                onBlur={handleBlur('password')}
+                rightIcon={
+                  <TouchableOpacity onPress={handlePasswordVisibility}>
+                    <Icon name={rightIcon} size={28} color="grey" />
+                  </TouchableOpacity>
+                }
+              />
+              <ErrorMessage errorValue={touched.password && errors.password} />
+              <View style={styles.buttonContainer}>
+                <FormButton
+                  buttonType="outline"
+                  onPress={handleSubmit}
+                  title="LOGIN"
+                  buttonColor="#039BE5"
+                  disabled={!isValid || isSubmitting}
+                  loading={isSubmitting}
+                />
+              </View>
+              <ErrorMessage errorValue={errors.general} />
+            </Fragment>
+          )}
+        </Formik>
+        <Button
+          title="Don't have an account? Sign Up"
+          onPress={goToSignup}
+          titleStyle={styles.signUpTitle}
+          type="clear"
+        />
+        <Button
+          title="Forgot Password?"
+          onPress={goToForgotPassword}
+          titleStyle={styles.forgotTitle}
+          type="clear"
+        />
+      </ScrollView>
     </SafeAreaView>
   );
 };
